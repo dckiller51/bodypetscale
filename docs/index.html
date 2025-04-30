@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Body Condition Score</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding-top: 20px;
+            box-sizing: border-box;
+        }
+
+        .controls {
+            margin-top: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            width: 60%;
+            max-width: 400px;
+        }
+
+        .slider-container {
+            width: 60%;
+            max-width: 600px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 10px;
+            background: linear-gradient(to right,
+                #ff0000 0%,
+                #ff6600 12.5%,
+                #ffcc00 25%,
+                #bbff00 37.5%,
+                #99ff00 50%,
+                #bbff00 62.5%,
+                #ffcc00 75%,
+                #ff6600 87.5%,
+                #ff0000 100%
+            );
+            border-radius: 5px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #333;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #333;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        .score-labels {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 25px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8em;
+            padding: 0 10px;
+        }
+
+        .score-labels span {
+            text-align: center;
+            flex-grow: 1;
+            position: absolute;
+            transform: translateX(-50%);
+        }
+
+        .score-labels span:first-child {
+            left: 0;
+            transform: translateX(0);
+        }
+
+        .score-labels span:last-child {
+            right: 0;
+            left: auto;
+            transform: translateX(0);
+        }
+
+        .image-detail-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 20px;
+            width: 60%;
+            max-width: 600px;
+        }
+
+        #imageDisplay {
+            text-align: center;
+        }
+
+        #imageDisplay img {
+            max-width: 300px;
+            height: auto;
+            border: none;
+        }
+
+        #scoreValueDisplay {
+            display: none;
+        }
+
+        #scoreDescription {
+            display: none;
+        }
+
+        #animalInfo {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px none;
+            border-radius: none;
+            font-size: 0.9em;
+            text-align: left;
+        }
+
+        #animalInfo h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        #animalInfo ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+
+        #animalInfo li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Body Condition Score</h1>
+
+    <div class="controls">
+        <label for="animalType">Animal Type:</label>
+        <select id="animalType">
+            <option value="cat">Cat</option>
+            <option value="dog-xsmall">Dog (X-Small)</option>
+            <option value="dog-small">Dog (Small)</option>
+            <option value="dog-medium">Dog (Medium)</option>
+            <option value="dog-large">Dog (Large)</option>
+            <option value="dog-giant">Dog (Giant)</option>
+        </select>
+    </div>
+
+    <div class="image-detail-container">
+        <div id="imageDisplay">
+            <img id="bcsImage" src="pictures/dog/medium/5.png" alt="BCS Score 5 (Medium Dog)">
+            <p id="scoreDescription">Ideal</p>
+        </div>
+        <div id="animalInfo">
+        </div>
+    </div>
+
+    <div class="slider-container">
+        <input type="range" id="slider" min="1" max="9" value="5">
+        <div id="scoreValueDisplay">5</div>
+        <div class="score-labels">
+            <span>1<br>Very Thin</span>
+            <span>2</span>
+            <span>3<br>Slightly Underweight</span>
+            <span>4</span>
+            <span>5<br>Ideal</span>
+            <span>6</span>
+            <span>7<br>Overweight</span>
+            <span>8</span>
+            <span>9<br>Very Obese</span>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

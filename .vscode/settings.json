@@ -1,0 +1,8 @@
+{
+  "files.associations": {
+    "*.yaml": "home-assistant"
+  },
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": true,
+  "python.pythonPath": "/usr/local/bin/python"
+}
