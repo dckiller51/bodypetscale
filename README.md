@@ -16,14 +16,14 @@ BodyPetScale uses your pet's weighing data, collected by their sensor and integr
 
 **Key Points for Dogs and Cats:**
 
-* **Weight Tracking:** Visualize your pet's weight changes over time to quickly detect any significant weight gain or loss, which could be a sign of a health issue.
-* **Ideal Weight (Estimation):** Based on the current weight, this integration may provide you with an estimation of your pet's ideal weight. **However, it is crucial to consult your veterinarian to determine your pet's specific ideal weight.**
+- **Weight Tracking:** Visualize your pet's weight changes over time to quickly detect any significant weight gain or loss, which could be a sign of a health issue.
+- **Ideal Weight (Estimation):** Based on the current weight, this integration may provide you with an estimation of your pet's ideal weight. **However, it is crucial to consult your veterinarian to determine your pet's specific ideal weight.**
 
 Here's a breakdown of the process:
 
 1. **Data Input:** Bodypetscale relies on data provided by your configured weight sensor. This can be:
-   - A `sensor` entity that's already integrated with Home Assistant.
-   - An `input_number` entity that's already integrated with Home Assistant.
+      - A `sensor` entity that's already integrated with Home Assistant.
+      - An `input_number` entity that's already integrated with Home Assistant.
 
 2. **Calculations:** The integration uses formulas to estimate your pet's ideal weight, based on the weight provided and the configured pet type. **Please note that these estimates are not a substitute for veterinary advice.**
 
@@ -31,7 +31,7 @@ Here's a breakdown of the process:
 
 **Key Considerations:**
 
-* **No External Services:** Bodypetscale performs all calculations locally within your Home Assistant instance. No data is sent to external services or the internet.
+- **No External Services:** Bodypetscale performs all calculations locally within your Home Assistant instance. No data is sent to external services or the internet.
 
 **Example:**
 
@@ -46,9 +46,9 @@ Let's say you've configured a weight sensor called `sensor.my_weight`. When you 
 Before installing Bodypetscale, make sure you have the following:
 
 1. **A dedicated pet weight sensor in Home Assistant**: There is no connection between Bodypetscale and a specific smart scale. Bodypetscale works with any weight sensor integrated into Home Assistant. This can be:
-   - A `sensor` entity dedicated to your pet. **Warning:** Using a sensor directly from a scale can cause complications.
-   - An `input_number` entity provides a robust solution for recording your weight measurements in Home Assistant, with the crucial advantage of data persistence even after a system restart.
-   **Important:** Each pet in Bodypetscale must have its own dedicated weight sensor. This sensor must be persistent, meaning that the data remains available when Home Assistant is restarted. Indeed, Bodypetscale retrieves the sensor value when it is initialized, which will distort the calculation data if the sensor is unavailable or at zero.
+      - A `sensor` entity dedicated to your pet. **Warning:** Using a sensor directly from a scale can cause complications.
+      - An `input_number` entity provides a robust solution for recording your weight measurements in Home Assistant, with the crucial advantage of data persistence even after a system restart.
+      **Important:** Each pet in Bodypetscale must have its own dedicated weight sensor. This sensor must be persistent, meaning that the data remains available when Home Assistant is restarted. Indeed, Bodypetscale retrieves the sensor value when it is initialized, which will distort the calculation data if the sensor is unavailable or at zero.
 
 2. **Home Assistant installed.**
 
@@ -77,19 +77,19 @@ If you plan to integrate your own last weigh-in sensor, make sure a dedicated se
 1. Open Home Assistant and go to "Settings" -> "Devices & Services" -> "Add Integration".
 2. Search for "Bodypetscale".
 3. **Personalize your integration:**
-   - **First Name (or other identifier):** Enter your first name or another identifier. **Important:** This identifier will determine the name of your Bodypetscale component in Home Assistant, as well as the names of all sensors created by it. Choose a clear and relevant name.
-   - **Animal type (Cat/Dog):** Select your animal type. This choice may influence the estimation formulas used.
+      - **First Name (or other identifier):** Enter your first name or another identifier. **Important:** This identifier will determine the name of your Bodypetscale component in Home Assistant, as well as the names of all sensors created by it. Choose a clear and relevant name.
+      - **Animal type (Cat/Dog):** Select your animal type. This choice may influence the estimation formulas used.
 4. **Select your body type** A link is available to help you choose.
 5. **Select your weight sensor:** Choose the existing weight sensor in Home Assistant (e.g., a `sensor`, or an `input_number`).
-   - **Important Recommendation:** It is **strongly recommended** that each Bodypetscale user has their own dedicated weight sensor. Using a shared weight sensor (e.g., one directly linked to a scale) can cause issues when Home Assistant restarts. This is because Bodypetscale retrieves the sensor's value upon initialization, which can skew calculations if multiple users weigh themselves successively on the same scale before the restart.
+      - **Important Recommendation:** It is **strongly recommended** that each Bodypetscale user has their own dedicated weight sensor. Using a shared weight sensor (e.g., one directly linked to a scale) can cause issues when Home Assistant restarts. This is because Bodypetscale retrieves the sensor's value upon initialization, which can skew calculations if multiple users weigh themselves successively on the same scale before the restart.
 6. **Last measurement time sensor (optional):**
-   If you have a last weigh-in sensor, select it here (e.g., a `sensor`, or an `input_datetime`). This sensor is used to record the date and time of the most recent measurement.
-   Recommendation: Just like the weight and impedance sensors, it is strongly recommended that each user has their own dedicated last weigh-in sensor to prevent conflicts or errors during Home Assistant restarts.
+      If you have a last weigh-in sensor, select it here (e.g., a `sensor`, or an `input_datetime`). This sensor is used to record the date and time of the most recent measurement.
+      Recommendation: Just like the weight and impedance sensors, it is strongly recommended that each user has their own dedicated last weigh-in sensor to prevent conflicts or errors during Home Assistant restarts.
 7. Click "Save".
 
 **Explanation of choices:**
 
-* **First Name/Identifier:** This field is important because it allows you to personalize the integration and avoid conflicts if multiple pet use Bodypetscale in your home. The name you choose will be used to name the entities created by the integration (e.g., `sensor.firstname_ideal_weight`, `sensor.firstname_body_type`, etc.).
+- **First Name/Identifier:** This field is important because it allows you to personalize the integration and avoid conflicts if multiple pet use Bodypetscale in your home. The name you choose will be used to name the entities created by the integration (e.g., `sensor.firstname_ideal_weight`, `sensor.firstname_body_type`, etc.).
 
 ## FAQ
 
@@ -103,13 +103,13 @@ This folder contains example configurations for generating weight, impedance, an
 
 The [example_config](example_config/) folder contains the following example configuration files:
 
-* **`esphome_configuration.yaml`**: Complete ESPHome configuration to generate sensors directly from the Xiaomi Mi Scale.
-* **`weight_impedance_update.yaml`**: Home Assistant configuration to generate sensors via the ESPHome integration or BLE Monitor.
-* **`interactive_notification_user_selection_weight_data_update.yaml`**: Example automation created from the blueprint for user selection and weight data update via interactive notification.
+- **`esphome_configuration.yaml`**: Complete ESPHome configuration to generate sensors directly from the Xiaomi Mi Scale.
+- **`weight_impedance_update.yaml`**: Home Assistant configuration to generate sensors via the ESPHome integration or BLE Monitor.
+- **`interactive_notification_user_selection_weight_data_update.yaml`**: Example automation created from the blueprint for user selection and weight data update via interactive notification.
 
 Please consult the configuration files within the [example_config](example_config/) folder for detailed information on generating weight, impedance, and last weighing sensors.
 
 ## Useful links
 
-* [ESPHome for Xiaomi Mi Scale](https://esphome.io/components/sensor/xiaomi_miscale.html)
-* [BLE Monitor for Xiaomi Mi Scale](https://github.com/custom-components/ble_monitor)
+- [ESPHome for Xiaomi Mi Scale](https://esphome.io/components/sensor/xiaomi_miscale.html)
+- [BLE Monitor for Xiaomi Mi Scale](https://github.com/custom-components/ble_monitor)
