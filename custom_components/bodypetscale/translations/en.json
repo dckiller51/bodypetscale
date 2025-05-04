@@ -1,0 +1,131 @@
+{
+  "config": {
+    "error": {
+      "already_configured": "Already configured"
+    },
+    "step": {
+      "options": {
+        "data": {
+          "morphology": "Morphology",
+          "last_measurement_time": "Last measurement time sensor",
+          "weight": "Weight sensor"
+        },
+        "data_description": {
+          "morphology": "Select the morphology of your animal. [Learn more](https://dckiller51.github.io/bodypetscale/)",
+          "last_measurement_time": "If you do not have a last weigh time sensor, leave this field blank."
+        }
+      },
+      "user": {
+        "data": {
+          "name": "Name",
+          "animal_type": "Animal type"
+        },
+        "data_description": {
+          "animal_type": "Select the type of animal."
+        }
+      }
+    }
+  },
+  "selector": {
+    "animal_type": {
+      "options": {
+        "dog": "Dog",
+        "cat": "Cat"
+      }
+    },
+    "morphology": {
+      "options": {
+        "1_very_thin": "Very Thin",
+        "2_underweight": "Underweight",
+        "3_slightly_underweight": "Slightly Underweight",
+        "4_ideal": "Ideal",
+        "5_ideal": "Ideal",
+        "6_slightly_overweight": "Slightly Overweight",
+        "7_overweight": "Overweight",
+        "8_obese": "Obese",
+        "9_very_obese": "Very Obese"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "body_type": {
+        "name": "Body Type",
+        "state": {
+          "1_very_thin": "Very Thin",
+          "2_underweight": "Underweight",
+          "3_slightly_underweight": "Slightly Underweight",
+          "4_ideal": "Ideal",
+          "5_ideal": "Ideal",
+          "6_slightly_overweight": "Slightly Overweight",
+          "7_overweight": "Overweight",
+          "8_obese": "Obese",
+          "9_very_obese": "Very obese",
+          "unavailable": "Unavailable"
+        }
+      },
+      "ideal_weight": {"name": "Ideal Weight"},
+      "last_measurement_time": { "name": "Last measurement time" },
+      "main": {
+        "name": "Main",
+        "state": {
+          "ok": "OK",
+          "problem": "Problem",
+          "unavailable": "Unavailable"
+        },
+        "state_attributes": {
+          "animal_type": {
+            "name": "Animal type",
+            "state": {
+              "cat": "Cat",
+              "dog": "Dog"
+            }
+          },
+          "body_type": {
+            "name": "Body type",
+            "state": {
+              "1_very_thin": "Very Thin",
+              "2_underweight": "Underweight",
+              "3_slightly_underweight": "Slightly Underweight",
+              "4_ideal": "Ideal",
+              "5_ideal": "Ideal",
+              "6_slightly_overweight": "Slightly Overweight",
+              "7_overweight": "Overweight",
+              "8_obese": "Obese",
+              "9_very_obese": "Very Obese",
+              "unavailable": "Unavailable"
+            }
+          },
+          "ideal_weight": {"name": "Ideal Weight"},
+          "issue": {
+            "name": "Issue",
+            "state": {
+              "weight_unavailable": "Weight unavailable",
+              "weight_low": "Weight low",
+              "weight_high": "Weight high"
+            }
+          },
+          "last_measurement_time": { "name": "Last measurement time" },
+          "weight": { "name": "Weight" }
+        }
+      },
+      "weight": { "name": "Weight" }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "morphology": "Morphology",
+          "last_measurement_time": "Last measurement time sensor",
+          "weight": "Weight sensor"
+        },
+        "data_description": {
+          "morphology": "Select the morphology of your animal. [Learn more](https://dckiller51.github.io/bodypetscale/)",
+          "last_measurement_time": "If you do not have a last weigh time sensor, leave this field blank."
+        }
+      }
+    }
+  },
+  "title": "BodyPetScale"
+}
