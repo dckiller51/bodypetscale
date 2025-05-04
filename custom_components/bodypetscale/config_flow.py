@@ -26,7 +26,7 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 
-@callback
+@callback  # type: ignore[misc]
 def get_options_schema(
     defaults: dict[str, Any] | MappingProxyType[str, Any],
 ) -> vol.Schema:
@@ -69,7 +69,7 @@ def get_options_schema(
     )
 
 
-class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):
+class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore[misc, call-arg]
     """Config flow for BodyPetScale."""
 
     VERSION = 1
@@ -78,7 +78,7 @@ class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):
         self._data: dict[str, Any] = {}
 
     @staticmethod
-    @callback
+    @callback  # type: ignore[misc]
     def async_get_options_flow(config_entry: ConfigEntry) -> BodyPetScaleOptionsFlow:
         return BodyPetScaleOptionsFlow(config_entry)
 
@@ -148,7 +148,7 @@ class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):
         )
 
 
-class BodyPetScaleOptionsFlow(OptionsFlow):
+class BodyPetScaleOptionsFlow(OptionsFlow):  # type: ignore[misc]
     """Options flow."""
 
     def __init__(self, config_entry: ConfigEntry) -> None:

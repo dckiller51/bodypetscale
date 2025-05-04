@@ -34,7 +34,7 @@ from .util import calculate_ideal_weight, get_config_option
 _LOGGER = logging.getLogger(__name__)
 
 
-class BasePetSensor(CoordinatorEntity, SensorEntity):
+class BasePetSensor(CoordinatorEntity, SensorEntity):  # type: ignore[misc]
     """Base class for BodyPetScale sensors."""
 
     _attr_should_poll = False
