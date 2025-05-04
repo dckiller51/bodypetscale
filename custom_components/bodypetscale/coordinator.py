@@ -11,7 +11,7 @@ from .const import DOMAIN
 _LOGGER = logging.getLogger(__name__)
 
 
-class BodyPetScaleCoordinator(DataUpdateCoordinator):
+class BodyPetScaleCoordinator(DataUpdateCoordinator):  # type: ignore[misc]
     """Coordinator for the BodyPetScale integration."""
 
     def __init__(
