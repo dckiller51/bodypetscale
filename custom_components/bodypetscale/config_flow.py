@@ -3,14 +3,14 @@
 from __future__ import annotations
 
 import logging
+from types import MappingProxyType
 from typing import Any
 
 import voluptuous as vol
 
-from homeassistant.config_entries import ConfigEntry, ConfigFlow, OptionsFlow
+from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResult, OptionsFlow
 from homeassistant.const import CONF_NAME
 from homeassistant.core import callback
-from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers import selector
 
 from .const import (
@@ -27,7 +27,9 @@ _LOGGER = logging.getLogger(__name__)
 
 
 @callback
-def _get_options_schema(defaults: dict[str, Any]) -> vol.Schema:
+def get_options_schema(
+    defaults: dict[str, Any] | MappingProxyType[str, Any],
+) -> vol.Schema:
     """Return options schema."""
     _LOGGER.debug("Generating options schema with defaults: %s", defaults)
     return vol.Schema(
@@ -82,9 +84,9 @@ class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Handle the initial step."""
-        errors = {}
+        errors: dict[str, str] = {}
 
         if user_input is not None:
             _LOGGER.debug("Step 'user' input: %s", user_input)
@@ -110,9 +112,9 @@ class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):
 
     async def async_step_options(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Handle options step."""
-        errors = {}
+        errors: dict[str, str] = {}
 
         if user_input is not None:
             _LOGGER.debug("Step 'options' input: %s", user_input)
@@ -126,7 +128,7 @@ class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):
                 errors[CONF_WEIGHT_SENSOR] = "invalid_weight_sensor"
                 return self.async_show_form(
                     step_id="options",
-                    data_schema=_get_options_schema(self._data),
+                    data_schema=get_options_schema(self._data),
                     errors=errors,
                 )
 
@@ -141,7 +143,7 @@ class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(
             step_id="options",
-            data_schema=_get_options_schema(self._data),
+            data_schema=get_options_schema(self._data),
             errors=errors,
         )
 
@@ -154,7 +156,7 @@ class BodyPetScaleOptionsFlow(OptionsFlow):
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Handle options."""
         if user_input is not None:
             _LOGGER.info("Updating config options: %s", user_input)
@@ -165,5 +167,5 @@ class BodyPetScaleOptionsFlow(OptionsFlow):
 
         return self.async_show_form(
             step_id="init",
-            data_schema=_get_options_schema(self._entry.options),
+            data_schema=get_options_schema(self._entry.options),
         )

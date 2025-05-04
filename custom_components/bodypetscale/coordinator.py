@@ -1,6 +1,7 @@
 """Coordinator for the BodyPetScale integration."""
 
 import logging
+from typing import Optional
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
@@ -17,8 +18,8 @@ class BodyPetScaleCoordinator(DataUpdateCoordinator):
         self,
         hass: HomeAssistant,
         data: dict,
-        weight_sensor_entity=None,
-        last_time_sensor_entity=None,
+        weight_sensor_entity: Optional[str] = None,
+        last_time_sensor_entity: Optional[str] = None,
     ) -> None:
         """Initialize the coordinator with fixed data."""
         super().__init__(

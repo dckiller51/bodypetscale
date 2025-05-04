@@ -1,6 +1,7 @@
 """Sensor platform for BodyPetScale."""
 
 import logging
+from typing import Any, Dict, Optional
 
 from homeassistant.components.sensor import (
     SensorEntity,
@@ -9,8 +10,8 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_NAME, UnitOfMass
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity import DeviceInfo
+from homeassistant.core import Event, EventStateChangedData, HomeAssistant
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import async_track_state_change_event
 from homeassistant.helpers.update_coordinator import (
@@ -41,8 +42,8 @@ class BasePetSensor(CoordinatorEntity, SensorEntity):
 
     def __init__(
         self,
-        coordinator,
-        config_entry,
+        coordinator: DataUpdateCoordinator,
+        config_entry: ConfigEntry,
         description: SensorEntityDescription,
     ) -> None:
         """Initialize a BodyPetScale base sensor."""
@@ -68,7 +69,7 @@ class BasePetSensor(CoordinatorEntity, SensorEntity):
 class IdealWeightSensor(BasePetSensor):
     """Sensor that calculates the ideal weight based on morphology and animal type."""
 
-    def __init__(self, coordinator, config_entry: ConfigEntry) -> None:
+    def __init__(self, coordinator: DataUpdateCoordinator, config_entry: ConfigEntry) -> None:
         """Initialize the IdealWeightSensor with a coordinator and configuration entry."""
         description = SensorEntityDescription(
             key=ATTR_IDEAL,
@@ -79,13 +80,9 @@ class IdealWeightSensor(BasePetSensor):
             state_class=SensorStateClass.MEASUREMENT,
         )
         super().__init__(coordinator, config_entry, description)
-        if self.coordinator is None:
-            _LOGGER.error(
-                "The coordinator was not properly initialized for IdealWeightSensor"
-            )
 
     @property
-    def native_value(self):
+    def native_value(self) -> Optional[float]:
         """Return the native value of the sensor."""
         weight = self.coordinator.data.get("weight")
         return calculate_ideal_weight(weight, self._morphology, self._animal_type)
@@ -94,7 +91,7 @@ class IdealWeightSensor(BasePetSensor):
 class BodyTypeSensor(BasePetSensor):
     """Sensor that returns the body type based on morphology."""
 
-    def __init__(self, coordinator, config_entry) -> None:
+    def __init__(self, coordinator: DataUpdateCoordinator, config_entry: ConfigEntry) -> None:
         """Initialize the BodyTypeSensor."""
         description = SensorEntityDescription(
             key=ATTR_BODY_TYPE,
@@ -113,7 +110,7 @@ class BodyTypeSensor(BasePetSensor):
 class MainSensor(BasePetSensor):
     """Main sensor that represents the global pet status."""
 
-    def __init__(self, coordinator, config_entry: ConfigEntry) -> None:
+    def __init__(self, coordinator: DataUpdateCoordinator, config_entry: ConfigEntry) -> None:
         """Initialize the MainSensor."""
         description = SensorEntityDescription(
             key=ATTR_MAIN,
@@ -129,10 +126,21 @@ class MainSensor(BasePetSensor):
         }
 
     @property
-    def native_value(self):
+    def native_value(self) -> str:
         """Return OK or PROBLEM based on weight value."""
-        weight = self.coordinator.data.get("weight")
-        self._attributes["weight"] = weight
+        current_weight = self.coordinator.data.get("weight")
+        self._attributes["weight"] = current_weight
+
+        if not isinstance(current_weight, (int, float, str)) or current_weight in [None, "unknown", "unavailable"]:
+            self._attributes["issue"] = "weight_unavailable"
+            return "problem"
+
+        try:
+            weight = float(current_weight)
+        except (ValueError, TypeError):
+            self._attributes["issue"] = "weight_unavailable"
+            return "problem"
+
         self._attributes["ideal_weight"] = calculate_ideal_weight(
             weight, self._morphology, self._animal_type
         )
@@ -141,15 +149,6 @@ class MainSensor(BasePetSensor):
             self._attributes["last_measurement_time"] = self.coordinator.data.get(
                 self._last_time_sensor
             )
-
-        if weight in [None, "unknown", "unavailable"]:
-            self._attributes["issue"] = "weight_unavailable"
-            return "problem"
-        try:
-            weight = float(weight)
-        except ValueError:
-            self._attributes["issue"] = "weight_unavailable"
-            return "problem"
 
         if weight == 0:
             self._attributes["issue"] = "weight_low"
@@ -162,12 +161,12 @@ class MainSensor(BasePetSensor):
         return "ok"
 
     @property
-    def extra_state_attributes(self):
+    def extra_state_attributes(self) -> Dict[str, Any]:
         """Return extra state attributes."""
         return self._attributes
 
     @property
-    def icon(self):
+    def icon(self) -> str:
         """Return an icon depending on the selected animal type (dog, cat, or default scale)."""
         if self._animal_type == "dog":
             return "mdi:dog"
@@ -177,16 +176,19 @@ class MainSensor(BasePetSensor):
 
 
 async def _async_update_data(
-    hass: HomeAssistant, weight_sensor: str, last_time_sensor: str | None = None
+    hass: HomeAssistant,
+    weight_sensor: str,
+    last_time_sensor: str | None = None
 ) -> dict[str, float | None]:
     """Logic to fetch new data from sensors."""
-    data = {}
+    data: dict[str, float | None] = {}
+
     weight_state = hass.states.get(weight_sensor)
     _LOGGER.debug("Weight sensor state (%s): %s", weight_sensor, weight_state)
+
     if weight_state and weight_state.state not in ["unavailable", "unknown"]:
         try:
             data["weight"] = float(weight_state.state)
-            _LOGGER.debug("Retrieved weight: %s", data["weight"])
         except ValueError:
             _LOGGER.warning(
                 "Unable to convert the weight sensor state (%s) to a number: %s",
@@ -195,22 +197,18 @@ async def _async_update_data(
             )
             data["weight"] = None
     else:
-        _LOGGER.warning(
-            "The state of the weight sensor (%s) is unavailable or unknown",
-            weight_sensor,
-        )
         data["weight"] = None
 
     if last_time_sensor:
         last_time_state = hass.states.get(last_time_sensor)
         if last_time_state and last_time_state.state not in ["unavailable", "unknown"]:
-            data[last_time_sensor] = last_time_state.state
+            try:
+                data[last_time_sensor] = float(last_time_state.state)
+            except ValueError:
+                data[last_time_sensor] = None
         else:
-            _LOGGER.warning(
-                "The state of the last measurement sensor (%s) is unavailable or unknown",
-                last_time_sensor,
-            )
             data[last_time_sensor] = None
+
     return data
 
 
@@ -259,7 +257,7 @@ async def async_setup_entry(
     if last_time_sensor:
         listeners.append(last_time_sensor)
 
-    async def async_state_changed_listener(event):
+    async def async_state_changed_listener(event: Event[EventStateChangedData]) -> None:
         """Update when the state of monitored sensors changes."""
         if event.data["entity_id"] in listeners:
             _LOGGER.info(

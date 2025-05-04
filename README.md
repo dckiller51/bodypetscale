@@ -1,4 +1,8 @@
-# Bodypetscale
+<p align="center">
+  <img src="https://raw.githubusercontent.com/dckiller51/bodypetscale/main/logo/Logo%20BodyPetScale.png" alt="BodyPetScale Logo" width="150">
+</p>
+
+# BodyPetScale
 
 [![GH-release](https://img.shields.io/github/v/release/dckiller51/bodypetscale.svg?style=flat-square)](https://github.com/dckiller51/bodypetscale/releases)
 [![GH-downloads](https://img.shields.io/github/downloads/dckiller51/bodypetscale/total?style=flat-square)](https://github.com/dckiller51/bodypetscale/releases)
