@@ -10,7 +10,6 @@ import voluptuous as vol
 
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResult, OptionsFlow
 from homeassistant.const import CONF_NAME
-from homeassistant.core import callback
 from homeassistant.helpers import selector
 
 from .const import (
@@ -26,146 +25,135 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 
-@callback  # type: ignore[misc]
 def get_options_schema(
     defaults: dict[str, Any] | MappingProxyType[str, Any],
 ) -> vol.Schema:
-    """Return options schema."""
-    _LOGGER.debug("Generating options schema with defaults: %s", defaults)
-    return vol.Schema(
-        {
-            vol.Required(CONF_MORPHOLOGY): selector.SelectSelector(
-                selector.SelectSelectorConfig(
-                    options=MORPHOLOGY_OPTIONS,
-                    mode=selector.SelectSelectorMode.DROPDOWN,
-                    translation_key="morphology",
-                )
-            ),
-            vol.Required(
-                CONF_WEIGHT_SENSOR,
-                description=(
-                    {"suggested_value": defaults.get(CONF_WEIGHT_SENSOR)}
-                    if CONF_WEIGHT_SENSOR in defaults
-                    else None
-                ),
-            ): selector.EntitySelector(
-                selector.EntitySelectorConfig(
-                    domain=["sensor", "input_number", "number"]
-                )
-            ),
-            vol.Optional(
-                CONF_LAST_TIME_SENSOR,
-                description=(
-                    {"suggested_value": defaults.get(CONF_LAST_TIME_SENSOR)}
-                    if CONF_LAST_TIME_SENSOR in defaults
-                    else None
-                ),
-            ): selector.EntitySelector(
-                selector.EntitySelectorConfig(
-                    domain=["sensor", "input_datetime"]
-                )
-            ),
-        }
+    """Return the options schema."""
+
+    schema: dict[vol.Optional | vol.Required, Any] = {}
+
+    schema[vol.Required(CONF_MORPHOLOGY)] = selector.SelectSelector(
+        selector.SelectSelectorConfig(
+            options=MORPHOLOGY_OPTIONS,
+            mode=selector.SelectSelectorMode.DROPDOWN,
+            translation_key="morphology",
+        )
     )
 
+    weight_suggest = defaults.get(CONF_WEIGHT_SENSOR)
+    schema[vol.Required(
+        CONF_WEIGHT_SENSOR,
+        description={"suggested_value": weight_suggest} if weight_suggest else None
+    )] = selector.EntitySelector(
+        selector.EntitySelectorConfig(domain=["sensor", "input_number", "number"])
+    )
 
-class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore[misc, call-arg]
-    """Config flow for BodyPetScale."""
+    last_time_suggest = defaults.get(CONF_LAST_TIME_SENSOR)
+    schema[vol.Optional(
+        CONF_LAST_TIME_SENSOR,
+        description={"suggested_value": last_time_suggest} if last_time_suggest else None
+    )] = selector.EntitySelector(
+        selector.EntitySelectorConfig(domain=["sensor", "input_datetime"])
+    )
+
+    return vol.Schema(schema)
+
+
+class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):
+    """Handle a config flow for BodyPetScale."""
 
     VERSION = 1
 
     def __init__(self) -> None:
-        self._data: dict[str, Any] = {}
+        """Initialize the config flow."""
+        self.data: dict[str, Any] = {}
 
     @staticmethod
-    @callback  # type: ignore[misc]
     def async_get_options_flow(config_entry: ConfigEntry) -> BodyPetScaleOptionsFlow:
+        """Get the options flow for this handler."""
         return BodyPetScaleOptionsFlow(config_entry)
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         """Handle the initial step."""
-        errors: dict[str, str] = {}
-
         if user_input is not None:
-            _LOGGER.debug("Step 'user' input: %s", user_input)
-            self._data = user_input
+            self.data = user_input
             return await self.async_step_options()
+
+        user_schema = vol.Schema(
+            {
+                vol.Required(CONF_NAME): str,
+                vol.Required(CONF_ANIMAL_TYPE): selector.SelectSelector(
+                    selector.SelectSelectorConfig(
+                        options=ANIMAL_TYPES,
+                        mode=selector.SelectSelectorMode.DROPDOWN,
+                        translation_key="animal_type",
+                    )
+                ),
+            }
+        )
 
         return self.async_show_form(
             step_id="user",
-            data_schema=vol.Schema(
-                {
-                    vol.Required(CONF_NAME): str,
-                    vol.Required(CONF_ANIMAL_TYPE): selector.SelectSelector(
-                        selector.SelectSelectorConfig(
-                            options=ANIMAL_TYPES,
-                            mode=selector.SelectSelectorMode.DROPDOWN,
-                            translation_key="animal_type",
-                        )
-                    ),
-                }
-            ),
-            errors=errors,
+            data_schema=user_schema,
         )
 
     async def async_step_options(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        """Handle options step."""
-        errors: dict[str, str] = {}
-
+        """Handle the options step."""
         if user_input is not None:
-            _LOGGER.debug("Step 'options' input: %s", user_input)
-
-            # Validation : weight sensor must exist
             weight_sensor_id = user_input.get(CONF_WEIGHT_SENSOR)
             if not weight_sensor_id or not self.hass.states.get(weight_sensor_id):
-                _LOGGER.warning(
-                    "Invalid or missing weight sensor: %s", weight_sensor_id
-                )
-                errors[CONF_WEIGHT_SENSOR] = "invalid_weight_sensor"
                 return self.async_show_form(
                     step_id="options",
-                    data_schema=get_options_schema(self._data),
-                    errors=errors,
+                    data_schema=await self.hass.async_add_executor_job(
+                        get_options_schema, self.data
+                    ),
+                    errors={CONF_WEIGHT_SENSOR: "invalid_weight_sensor"},
                 )
 
-            _LOGGER.info(
-                "Creating config entry: data=%s, options=%s", self._data, user_input
-            )
             return self.async_create_entry(
-                title=self._data[CONF_NAME],
-                data=self._data,
+                title=self.data[CONF_NAME],
+                data=self.data,
                 options=user_input,
             )
 
+        options_schema = await self.hass.async_add_executor_job(
+            get_options_schema, self.data
+        )
+
         return self.async_show_form(
             step_id="options",
-            data_schema=get_options_schema(self._data),
-            errors=errors,
+            data_schema=options_schema,
         )
 
 
-class BodyPetScaleOptionsFlow(OptionsFlow):  # type: ignore[misc]
-    """Options flow."""
+class BodyPetScaleOptionsFlow(OptionsFlow):
+    """Handle BodyPetScale options."""
 
     def __init__(self, config_entry: ConfigEntry) -> None:
-        self._entry = config_entry
+        self.config_entry = config_entry
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        """Handle options."""
+        """Manage BodyPetScale options."""
         if user_input is not None:
-            _LOGGER.info("Updating config options: %s", user_input)
-            return self.async_create_entry(
-                title=self._entry.title,
-                data=user_input,
-            )
+            _LOGGER.info("Updating BodyPetScale options: %s", user_input)
+            return self.async_create_entry(data=user_input)
+
+        options_schema = await self.hass.async_add_executor_job(
+            get_options_schema, self.config_entry.options
+        )
 
         return self.async_show_form(
             step_id="init",
-            data_schema=get_options_schema(self._entry.options),
+            data_schema=self.add_suggested_values_to_schema(
+                options_schema, self.config_entry.options
+            ),
+            description_placeholders={
+                CONF_NAME: self.config_entry.data.get(CONF_NAME, "pet")
+            },
         )
