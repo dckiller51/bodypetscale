@@ -10,7 +10,9 @@ from .const import MORPHOLOGY_PERCENTAGES
 _LOGGER = logging.getLogger(__name__)
 
 
-def calculate_ideal_weight(weight: Optional[float], morphology: Optional[str], animal_type: Optional[str]) -> Optional[float]:
+def calculate_ideal_weight(
+    weight: float | None, morphology: str | None, animal_type: str | None
+) -> float | None:
     """Calculate ideal weight based on morphology and animal type."""
     if weight is None or not morphology or not animal_type:
         return None
@@ -18,9 +20,7 @@ def calculate_ideal_weight(weight: Optional[float], morphology: Optional[str], a
     try:
         morph_index = int(morphology.split("_")[0])
     except (ValueError, IndexError):
-        _LOGGER.warning(
-            "Unable to extract morphology index from %s", morphology
-        )
+        _LOGGER.warning("Unable to extract morphology index from %s", morphology)
         return None
 
     if morph_index not in MORPHOLOGY_PERCENTAGES:

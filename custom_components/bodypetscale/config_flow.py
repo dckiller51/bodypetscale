@@ -7,8 +7,12 @@ from types import MappingProxyType
 from typing import Any
 
 import voluptuous as vol
-
-from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResult, OptionsFlow
+from homeassistant.config_entries import (
+    ConfigEntry,
+    ConfigFlow,
+    ConfigFlowResult,
+    OptionsFlow,
+)
 from homeassistant.const import CONF_NAME
 from homeassistant.helpers import selector
 
@@ -41,18 +45,24 @@ def get_options_schema(
     )
 
     weight_suggest = defaults.get(CONF_WEIGHT_SENSOR)
-    schema[vol.Required(
-        CONF_WEIGHT_SENSOR,
-        description={"suggested_value": weight_suggest} if weight_suggest else None
-    )] = selector.EntitySelector(
+    schema[
+        vol.Required(
+            CONF_WEIGHT_SENSOR,
+            description={"suggested_value": weight_suggest} if weight_suggest else None,
+        )
+    ] = selector.EntitySelector(
         selector.EntitySelectorConfig(domain=["sensor", "input_number", "number"])
     )
 
     last_time_suggest = defaults.get(CONF_LAST_TIME_SENSOR)
-    schema[vol.Optional(
-        CONF_LAST_TIME_SENSOR,
-        description={"suggested_value": last_time_suggest} if last_time_suggest else None
-    )] = selector.EntitySelector(
+    schema[
+        vol.Optional(
+            CONF_LAST_TIME_SENSOR,
+            description=(
+                {"suggested_value": last_time_suggest} if last_time_suggest else None
+            ),
+        )
+    ] = selector.EntitySelector(
         selector.EntitySelectorConfig(domain=["sensor", "input_datetime"])
     )
 

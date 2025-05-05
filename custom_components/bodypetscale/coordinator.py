@@ -18,8 +18,8 @@ class BodyPetScaleCoordinator(DataUpdateCoordinator):
         self,
         hass: HomeAssistant,
         data: dict,
-        weight_sensor_entity: Optional[str] = None,
-        last_time_sensor_entity: Optional[str] = None,
+        weight_sensor_entity: str | None = None,
+        last_time_sensor_entity: str | None = None,
     ) -> None:
         """Initialize the coordinator with fixed data."""
         super().__init__(
