@@ -6,44 +6,23 @@
     "step": {
       "options": {
         "data": {
-          "morphology": "Morphologie",
           "last_measurement_time": "Capteur de la dernière pesée",
+          "morphology": "Morphologie",
           "weight": "Capteur de poids"
         },
         "data_description": {
-          "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus](https://dckiller51.github.io/bodypetscale/)",
-          "last_measurement_time": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide."
+          "last_measurement_time": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide.",
+          "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus](https://dckiller51.github.io/bodypetscale/)"
         }
       },
       "user": {
         "data": {
-          "name": "Nom",
-          "animal_type": "Type d'animal"
+          "animal_type": "Type d'animal",
+          "name": "Nom"
         },
         "data_description": {
           "animal_type": "Sélectionnez le type d'animal."
         }
-      }
-    }
-  },
-  "selector": {
-    "animal_type": {
-      "options": {
-        "dog": "Chien",
-        "cat": "Chat"
-      }
-  },
-    "morphology": {
-      "options": {
-        "1_very_thin": "Très mince",
-        "2_underweight": "Insuffisance pondérale",
-        "3_slightly_underweight": "Légèrement maigre",
-        "4_ideal": "Idéal",
-        "5_ideal": "Idéal",
-        "6_slightly_overweight": "Légèrement en surpoids",
-        "7_overweight": "Surpoids",
-        "8_obese": "Obèse",
-        "9_very_obese": "Très obèse"
       }
     }
   },
@@ -64,7 +43,7 @@
           "unavailable": "Indisponible"
         }
       },
-      "ideal_weight": {"name": "Poids Idéal"},
+      "ideal_weight": { "name": "Poids Idéal" },
       "last_measurement_time": { "name": "Dernière heure de pesée" },
       "main": {
         "name": "Principal",
@@ -96,13 +75,13 @@
               "unavailable": "Indisponible"
             }
           },
-          "ideal_weight": {"name": "Poids Idéal"},
+          "ideal_weight": { "name": "Poids Idéal" },
           "issue": {
             "name": "Problème",
             "state": {
-              "weight_unavailable": "Poids indisponible",
+              "weight_high": "Poids élevé",
               "weight_low": "Poids faible",
-              "weight_high": "Poids élevé"
+              "weight_unavailable": "Poids indisponible"
             }
           },
           "last_measurement_time": { "name": "Dernière heure de pesée" },
@@ -116,14 +95,35 @@
     "step": {
       "init": {
         "data": {
-          "morphology": "Morphologie",
           "last_measurement_time": "Capteur de la dernière pesée",
+          "morphology": "Morphologie",
           "weight": "Capteur de poids"
         },
         "data_description": {
-          "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus](https://dckiller51.github.io/bodypetscale/)",
-          "last_measurement_time": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide."
+          "last_measurement_time": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide.",
+          "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus](https://dckiller51.github.io/bodypetscale/)"
         }
+      }
+    }
+  },
+  "selector": {
+    "animal_type": {
+      "options": {
+        "cat": "Chat",
+        "dog": "Chien"
+      }
+    },
+    "morphology": {
+      "options": {
+        "1_very_thin": "Très mince",
+        "2_underweight": "Insuffisance pondérale",
+        "3_slightly_underweight": "Légèrement maigre",
+        "4_ideal": "Idéal",
+        "5_ideal": "Idéal",
+        "6_slightly_overweight": "Légèrement en surpoids",
+        "7_overweight": "Surpoids",
+        "8_obese": "Obèse",
+        "9_very_obese": "Très obèse"
       }
     }
   },

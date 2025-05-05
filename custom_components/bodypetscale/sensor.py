@@ -69,7 +69,9 @@ class BasePetSensor(CoordinatorEntity, SensorEntity):
 class IdealWeightSensor(BasePetSensor):
     """Sensor that calculates the ideal weight based on morphology and animal type."""
 
-    def __init__(self, coordinator: DataUpdateCoordinator, config_entry: ConfigEntry) -> None:
+    def __init__(
+        self, coordinator: DataUpdateCoordinator, config_entry: ConfigEntry
+    ) -> None:
         """Initialize the IdealWeightSensor with a coordinator and configuration entry."""
         description = SensorEntityDescription(
             key=ATTR_IDEAL,
@@ -82,7 +84,7 @@ class IdealWeightSensor(BasePetSensor):
         super().__init__(coordinator, config_entry, description)
 
     @property
-    def native_value(self) -> Optional[float]:
+    def native_value(self) -> float | None:
         """Return the native value of the sensor."""
         weight = self.coordinator.data.get("weight")
         return calculate_ideal_weight(weight, self._morphology, self._animal_type)
@@ -91,7 +93,9 @@ class IdealWeightSensor(BasePetSensor):
 class BodyTypeSensor(BasePetSensor):
     """Sensor that returns the body type based on morphology."""
 
-    def __init__(self, coordinator: DataUpdateCoordinator, config_entry: ConfigEntry) -> None:
+    def __init__(
+        self, coordinator: DataUpdateCoordinator, config_entry: ConfigEntry
+    ) -> None:
         """Initialize the BodyTypeSensor."""
         description = SensorEntityDescription(
             key=ATTR_BODY_TYPE,
@@ -110,7 +114,9 @@ class BodyTypeSensor(BasePetSensor):
 class MainSensor(BasePetSensor):
     """Main sensor that represents the global pet status."""
 
-    def __init__(self, coordinator: DataUpdateCoordinator, config_entry: ConfigEntry) -> None:
+    def __init__(
+        self, coordinator: DataUpdateCoordinator, config_entry: ConfigEntry
+    ) -> None:
         """Initialize the MainSensor."""
         description = SensorEntityDescription(
             key=ATTR_MAIN,
@@ -131,7 +137,11 @@ class MainSensor(BasePetSensor):
         current_weight = self.coordinator.data.get("weight")
         self._attributes["weight"] = current_weight
 
-        if not isinstance(current_weight, (int, float, str)) or current_weight in [None, "unknown", "unavailable"]:
+        if not isinstance(current_weight, (int, float, str)) or current_weight in [
+            None,
+            "unknown",
+            "unavailable",
+        ]:
             self._attributes["issue"] = "weight_unavailable"
             return "problem"
 
@@ -161,7 +171,7 @@ class MainSensor(BasePetSensor):
         return "ok"
 
     @property
-    def extra_state_attributes(self) -> Dict[str, Any]:
+    def extra_state_attributes(self) -> dict[str, Any]:
         """Return extra state attributes."""
         return self._attributes
 
@@ -176,9 +186,7 @@ class MainSensor(BasePetSensor):
 
 
 async def _async_update_data(
-    hass: HomeAssistant,
-    weight_sensor: str,
-    last_time_sensor: str | None = None
+    hass: HomeAssistant, weight_sensor: str, last_time_sensor: str | None = None
 ) -> dict[str, float | None]:
     """Logic to fetch new data from sensors."""
     data: dict[str, float | None] = {}
