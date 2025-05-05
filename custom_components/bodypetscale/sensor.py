@@ -259,11 +259,14 @@ async def async_setup_entry(
 
     async def async_state_changed_listener(event: Event[EventStateChangedData]) -> None:
         """Update when the state of monitored sensors changes."""
-        if event.data["entity_id"] in listeners:
+        entity_id = event.data["entity_id"]
+
+        if entity_id in listeners:
             _LOGGER.info(
                 "Monitored sensor %s changed, updating",
-                event.data["entity_id"],
+                entity_id,
             )
             await coordinator.async_refresh()
 
-    async_track_state_change_event(hass, listeners, async_state_changed_listener)
+    for entity_id in listeners:
+        async_track_state_change_event(hass, entity_id, async_state_changed_listener)
