@@ -1,6 +1,7 @@
 """Util module."""
 
 import logging
+from dataclasses import dataclass
 from typing import Any, Optional
 
 from homeassistant.config_entries import ConfigEntry
@@ -40,3 +41,13 @@ def calculate_ideal_weight(weight: Optional[float], morphology: Optional[str], a
 def get_config_option(entry: ConfigEntry, key: str, default: Any = None) -> Any:
     """Retrieve an option from the config with fallback."""
     return entry.options.get(key) or entry.data.get(key, default)
+
+
+@dataclass
+class PetScaleConfig:
+    """Configuration container for BodyPetScale coordinator."""
+    weight_sensor: str
+    last_time_sensor: Optional[str]
+    animal_type: str
+    morphology: str
+    name: str

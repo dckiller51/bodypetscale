@@ -8,8 +8,8 @@ ISSUE_URL = "https://github.com/dckiller51/bodypetscale/issues"
 
 CONF_ANIMAL_TYPE = "animal_type"
 CONF_MORPHOLOGY = "morphology"
-CONF_WEIGHT_SENSOR = "weight"
-CONF_LAST_TIME_SENSOR = "last_measurement_time"
+CONF_WEIGHT_SENSOR = "weight_sensor"
+CONF_LAST_TIME_SENSOR = "last_time_sensor"
 
 ATTR_BODY_TYPE = "body_type"
 ATTR_IDEAL = "ideal_weight"

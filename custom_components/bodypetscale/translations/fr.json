@@ -1,18 +1,19 @@
 {
   "config": {
     "error": {
-      "already_configured": "Déjà configuré"
+      "invalid_weight_sensor": "Capteur de poids invalide",
+      "name_exists": "Déjà configuré"
     },
     "step": {
       "options": {
         "data": {
           "morphology": "Morphologie",
-          "last_measurement_time": "Capteur de la dernière pesée",
-          "weight": "Capteur de poids"
+          "last_time_sensor": "Capteur de la dernière pesée",
+          "weight_sensor": "Capteur de poids"
         },
         "data_description": {
           "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus](https://dckiller51.github.io/bodypetscale/)",
-          "last_measurement_time": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide."
+          "last_time_sensor": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide."
         }
       },
       "user": {
@@ -100,6 +101,8 @@
           "issue": {
             "name": "Problème",
             "state": {
+              "last_time_invalid": "Dernière mesure invalide",
+              "last_time_unavailable": "Dernière mesure indisponible",
               "weight_unavailable": "Poids indisponible",
               "weight_low": "Poids faible",
               "weight_high": "Poids élevé"
@@ -117,12 +120,12 @@
       "init": {
         "data": {
           "morphology": "Morphologie",
-          "last_measurement_time": "Capteur de la dernière pesée",
-          "weight": "Capteur de poids"
+          "last_time_sensor": "Capteur de la dernière pesée",
+          "weight_sensor": "Capteur de poids"
         },
         "data_description": {
           "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus](https://dckiller51.github.io/bodypetscale/)",
-          "last_measurement_time": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide."
+          "last_time_sensor": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide."
         }
       }
     }

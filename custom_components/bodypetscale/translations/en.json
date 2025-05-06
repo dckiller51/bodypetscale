@@ -1,18 +1,19 @@
 {
   "config": {
     "error": {
-      "already_configured": "Already configured"
+      "invalid_weight_sensor": "Invalid weight sensor",
+      "name_exists": "Already configured"
     },
     "step": {
       "options": {
         "data": {
           "morphology": "Morphology",
-          "last_measurement_time": "Last measurement time sensor",
-          "weight": "Weight sensor"
+          "last_time_sensor": "Last measurement time sensor",
+          "weight_sensor": "Weight sensor"
         },
         "data_description": {
           "morphology": "Select the morphology of your animal. [Learn more](https://dckiller51.github.io/bodypetscale/)",
-          "last_measurement_time": "If you do not have a last weigh time sensor, leave this field blank."
+          "last_time_sensor": "If you do not have a last weigh time sensor, leave this field blank."
         }
       },
       "user": {
@@ -100,6 +101,8 @@
           "issue": {
             "name": "Issue",
             "state": {
+              "last_time_invalid": "Last time invalid",
+              "last_time_unavailable": "Last time unavailable",
               "weight_unavailable": "Weight unavailable",
               "weight_low": "Weight low",
               "weight_high": "Weight high"
@@ -117,12 +120,12 @@
       "init": {
         "data": {
           "morphology": "Morphology",
-          "last_measurement_time": "Last measurement time sensor",
-          "weight": "Weight sensor"
+          "last_time_sensor": "Last measurement time sensor",
+          "weight_sensor": "Weight sensor"
         },
         "data_description": {
           "morphology": "Select the morphology of your animal. [Learn more](https://dckiller51.github.io/bodypetscale/)",
-          "last_measurement_time": "If you do not have a last weigh time sensor, leave this field blank."
+          "last_time_sensor": "If you do not have a last weigh time sensor, leave this field blank."
         }
       }
     }

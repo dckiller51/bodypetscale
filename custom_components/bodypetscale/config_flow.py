@@ -77,9 +77,19 @@ class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         """Handle the initial step."""
+        errors: dict[str, str] = {}
+
         if user_input is not None:
-            self.data = user_input
-            return await self.async_step_options()
+            existing_entries = self._async_current_entries()
+            for entry in existing_entries:
+                if entry.data.get(CONF_NAME, "").strip().lower() == user_input[CONF_NAME].strip().lower():
+                    errors[CONF_NAME] = "name_exists"
+                    break
+
+            if not errors:
+                self.data = user_input
+                await self.async_set_unique_id(user_input[CONF_NAME].strip().lower())
+                return await self.async_step_options()
 
         user_schema = vol.Schema(
             {
@@ -97,12 +107,15 @@ class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="user",
             data_schema=user_schema,
+            errors=errors,
         )
 
     async def async_step_options(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         """Handle the options step."""
+        errors: dict[str, str] = {}
+
         if user_input is not None:
             weight_sensor_id = user_input.get(CONF_WEIGHT_SENSOR)
             if not weight_sensor_id or not self.hass.states.get(weight_sensor_id):
@@ -127,6 +140,7 @@ class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="options",
             data_schema=options_schema,
+            errors=errors,
         )
 
 

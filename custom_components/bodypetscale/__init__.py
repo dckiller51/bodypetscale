@@ -13,6 +13,7 @@ from .const import (
     STARTUP_MESSAGE,
 )
 from .coordinator import BodyPetScaleCoordinator
+from .util import get_config_option, PetScaleConfig
 
 PLATFORMS = [Platform.SENSOR]
 
@@ -26,24 +27,28 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     _LOGGER.debug("Loaded entry data: %s", entry.data)
     _LOGGER.debug("Loaded entry options: %s", entry.options)
 
-    weight_sensor = entry.options.get(CONF_WEIGHT_SENSOR)
-    if not weight_sensor:
+    weight_sensor_entity = get_config_option(entry, CONF_WEIGHT_SENSOR)
+    if not weight_sensor_entity:
         _LOGGER.error("Missing weight sensor entity in config entry")
         return False
-    last_time_sensor_entity = entry.data.get(CONF_LAST_TIME_SENSOR)  # optionnel
 
-    data = {
-        "name": entry.data.get(CONF_NAME),
-        "animal_type": entry.data.get(CONF_ANIMAL_TYPE),
-    }
+    last_time_entity = get_config_option(entry, CONF_LAST_TIME_SENSOR)  # Optionnel
+    animal_type = entry.data.get(CONF_ANIMAL_TYPE, "")
+    morphology = entry.options.get("morphology", "")
+    name = entry.data.get(CONF_NAME, "")
 
-    coordinator = BodyPetScaleCoordinator(
-        hass,
-        data,
-        weight_sensor_entity=weight_sensor,
-        last_time_sensor_entity=last_time_sensor_entity,
+    config = PetScaleConfig(
+        weight_sensor=weight_sensor_entity,
+        last_time_sensor=last_time_entity,
+        animal_type=animal_type,
+        morphology=morphology,
+        name=name,
     )
+
+    coordinator = BodyPetScaleCoordinator(hass, config)
+
     await coordinator.async_config_entry_first_refresh()
+
     hass.data.setdefault(entry.domain, {})[entry.entry_id] = coordinator
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
