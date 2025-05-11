@@ -7,19 +7,38 @@
     "step": {
       "options": {
         "data": {
+          "living_environment": "Lieu de vie",
           "morphology": "Morphologie",
           "last_time_sensor": "Capteur de la dernière pesée",
           "weight_sensor": "Capteur de poids"
         },
         "data_description": {
+          "living_environment": "Sélectionnez le lieu de vie de votre animal.",
           "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus](https://dckiller51.github.io/bodypetscale/)",
           "last_time_sensor": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide."
+        }
+      },
+      "profile": {
+        "data": {
+          "activity": "Activité",
+          "appetite": "Appétit",
+          "breed": "Race",
+          "reproductive": "Statut reproductif",
+          "temperament": "Tempérament"
+        },
+        "data_description": {
+          "activity": "Sélectionnez l'activité de votre animal.",
+          "appetite": "Sélectionnez l'appétit de votre animal.",
+          "breed": "Sélectionnez la race de votre animal.",
+          "reproductive": "Sélectionnez le statut reproductif de votre animal.",
+          "temperament": "Sélectionnez le tempérament de votre animal."
         }
       },
       "user": {
         "data": {
           "name": "Nom",
-          "animal_type": "Type d'animal"
+          "animal_type": "Type d'animal",
+          "birthday": "Date d'anniversaire"
         },
         "data_description": {
           "animal_type": "Sélectionnez le type d'animal."
@@ -28,23 +47,269 @@
     }
   },
   "selector": {
+    "activity_level": {
+      "options": {
+        "active_sporty": "Actif / sportif (+1h30 de sortie)",
+        "calm": "Calme (moins d'1h de sortie)",
+        "convalescent": "Convalescence",
+        "hyperactive_very_sporty": "Hyperactif / grand sportif (+2h)",
+        "limited_outdoor_access": "Accès limité à l'extérieur (< 12h)",
+        "normal":"Normal (1h de sortie)",
+        "no_outdoor_access": "Pas d'accès à l'extérieur",
+        "outdoor_access": "Accès à l'extérieur (> 12h)",
+        "very_calm": "Très calme (que le jardin)"
+      }
+    },
     "animal_type": {
       "options": {
         "dog": "Chien",
         "cat": "Chat"
       }
-  },
+    },
+    "appetite": {
+      "options": {
+        "hearty_eater": "Gourmand",
+        "normal": "Normal",
+        "small_eater": "Petit mangeur"
+      }
+    },
+    "breed_options": {
+      "options": {
+        "abyssinian": "Abyssin",
+        "afghan_hound": "Lévrier Afghan",
+        "affenpinscher": "Affenpinscher",
+        "akita_inu": "Akita Inu",
+        "alaskan_malamute": "Malamute de l'Alaska",
+        "american_akita": "Akita Américain",
+        "american_bobtail": "American Bobtail",
+        "american_bulldog": "Bouledogue Américain",
+        "american_cocker_spaniel": "Cocker Américain",
+        "american_curl": "American Curl",
+        "american_shepherd": "Berger Américain",
+        "american_shorthair": "American Shorthair",
+        "american_staffordshire_terrier": "American Staffordshire Terrier",
+        "anatolian_shepherd_dog": "Berger d'Anatolie",
+        "ardennes_cattle_dog": "Bouvier des Ardennes",
+        "ariegeois": "Ariegeois",
+        "australian_cattle_dog": "Bouvier Australien",
+        "australian_kelpie": "Kelpie Australien",
+        "australian_shepherd": "Berger Australien",
+        "american_wirehair": "American Wirehair",
+        "azawakh": "Azawakh",
+        "balinese": "Balinais",
+        "basset_artesien_normand": "Basset Artésien Normand",
+        "basset_fauve_de_bretagne": "Basset Fauve de Bretagne",
+        "basset_hound": "Basset Hound",
+        "bavarian_mountain_hound": "Rouge de Bavière",
+        "beagle": "Beagle",
+        "beagle_harrier": "Beagle-harrier",
+        "bearded_collie": "Bearded Collie",
+        "beauceron": "Beauceron",
+        "bedlington_terrier": "Bedlington Terrier",
+        "belgian_shepherd_gronendael": "Berger Belge (Gronendael)",
+        "belgian_shepherd_laekenois": "Berger Belge (Laekenois)",
+        "belgian_shepherd_malinois": "Berger Belge (Malinois)",
+        "belgian_shepherd_tervuren": "Berger Belge (Tervuren)",
+        "bengal": "Bengal",
+        "bernese_mountain_dog": "Bouvier Bernois",
+        "bichon_frise": "Bichon Frisé",
+        "birman": "Birman",
+        "blue_gascony_basset": "Basset bleu de Gascogne",
+        "bolognese": "Bichon Bolonais",
+        "bombay": "Bombay",
+        "border_collie": "Border Collie",
+        "border_terrier": "Border Terrier",
+        "borzoi": "Barzoï",
+        "boston_terrier": "Boston Terrier",
+        "bouvier_des_flandres": "Bouvier des Flandres",
+        "boxer": "Boxer",
+        "briard": "Berger de Brie",
+        "british_longhair": "British Longhair",
+        "british_shorthair": "British Shorthair",
+        "brittany_spaniel": "Épagneul Breton",
+        "brussels_griffon": "Griffon Belge",
+        "bull_terrier": "Bull Terrier",
+        "bullmastiff": "Bull Mastif",
+        "burmese": "Burmese",
+        "cairn_terrier": "Cairn Terrier",
+        "cane_corso": "Cane Corso",
+        "catalan_sheepdog": "Berger Catalan",
+        "cavalier_king_charles_spaniel": "Cavalier King Charles",
+        "chartreux": "Chartreux",
+        "chihuahua": "Chihuahua",
+        "chinese_crested_dog": "Chien chinois à crête",
+        "chow_chow": "Chow-chow",
+        "cirneco_dell_etna": "Cirneco de l'Etna",
+        "clumber_spaniel": "Clumber Spaniel",
+        "cocker_spaniel": "Cocker Spaniel",
+        "collie": "Colley",
+        "cornish_rex": "Cornish Rex",
+        "coton_de_tulear": "Coton de Tuléar",
+        "curly_coated_retriever": "Curly-Coated Retriever",
+        "czechoslovakian_wolfdog": "Chien-loup Tchèque",
+        "dalmatian": "Dalmatien",
+        "dandie_dinmont_terrier": "Dandie Dinmont Terrier",
+        "devon_rex": "Devon Rex",
+        "doberman_pinscher": "Doberman",
+        "dogo_argentino": "Dogue Argentin",
+        "dogue_de_bordeaux": "Dogue de Bordeaux",
+        "domestic_longhair": "Européen Poil Long (chat de gouttière)",
+        "domestic_mediumhair": "Européen Poil Moyen (chat de gouttière)",
+        "domestic_shorthair": "Européen Poil Court (chat de gouttière)",
+        "dutch_shepherd": "Berger Hollandais",
+        "east_siberian_laika": "Laïka de Sibérie orientale",
+        "egyptian_mau": "Mau Égyptien",
+        "english_bulldog": "Bouledogue Anglais",
+        "english_cocker_spaniel": "Cocker Anglais",
+        "entlebucher_mountain_dog": " Bouvier de l'Entlebuch",
+        "eurasier": "Eurasier",
+        "exotic_shorthair": "Exotic Shorthair",
+        "finnish_lapphund": "Chien Finnois de Laponie",
+        "flat_coated_retriever": "Flat-Coated Retriever",
+        "fox_terrier": "Fox Terrier",
+        "french_bulldog": "Bouledogue Français",
+        "french_pointer": "Braque Français",
+        "german_shepherd": "Berger Allemand",
+        "german_pointer": "Braque Allemand",
+        "golden_retriever": "Golden Retriever",
+        "great_dane": "Dogue allemand",
+        "great_pyrenees": "Montagne des Pyrénées",
+        "greater_swiss_mountain_dog": "Grand Bouvier Suisse",
+        "greenland_dog": "Chien du Groenland",
+        "greyhound": "Lévrier greyhound",
+        "griffon_fauve_de_bourgogne": "Griffon Fauve de Bourgogne",
+        "havana_brown": "Havana Brown",
+        "highland_fold": "Scottish fold",
+        "icelandic_sheepdog": "Chien de berger Islandais",
+        "irish_wolfhound": "Lévrier Irlandais",
+        "italian_greyhound": "Petit Lévrier Italien",
+        "jack_russell_terrier": "Jack Russell",
+        "japanese_bobtail": "Bobtail Japonais (Japanese Bobtail)",
+        "japanese_chin": "Épagneul Japonais",
+        "javanese": "Javanais",
+        "kai_ken": "Kai",
+        "karelian_bear_dog": "Chien d'ours de Carélie",
+        "king_charles_spaniel": "King Charles Spaniel",
+        "komondor": "Komondor",
+        "korat": "Korat",
+        "lagotto_romagnolo": "Chien d'eau Romagnol",
+        "landseer": "Landseer",
+        "lapphund_swedish": "Chien Suédois de Laponie",
+        "leonberger": "Leonberg",
+        "lhasa_apso": "Lhassa Apso",
+        "lowchen": "Petit chien lion",
+        "magyar_agar": "Lévrier Hongrois",
+        "maine_coon": "Maine Coon",
+        "maltese": "Bichon Maltais",
+        "manchester_terrier": "Manchester Terrier",
+        "mandarin": "Oriental Longhair (Mandarin)",
+        "manx": "Manx",
+        "mastiff": "Mastiff",
+        "miniature_pinscher": "Pinscher nain",
+        "miniature_poodle": "Caniche nain",
+        "mixed_breed_or_other_breed": "Croisé(e) ou Autre Race",
+        "munchkin": "Munchkin",
+        "neapolitan_mastiff": "Mâtin de Naples",
+        "norwegian_buhund": "Buhund Norvégien",
+        "norwegian_elkhound": "Chien d'élan Norvégien",
+        "norwegian_forest": "Norvégien (Norwegian Forest Cat)",
+        "norwegian_lundehund": "Chien Norvégien de Macareux",
+        "old_english_sheepdog": "Bobtail (Old English Sheepdog)",
+        "oriental_shorthair": "Oriental Shorthair",
+        "papillon": "Épagneul Papillon",
+        "parson_russell_terrier": "Parson Russell Terrier",
+        "pekingese": "Pékinois",
+        "persian": "Persan",
+        "pixie_bob": "Pixie-bob",
+        "pointer": "Pointer",
+        "polish_greyhound": "Lévrier Polonais",
+        "porcelaine": "Porcelaine",
+        "portuguese_water_dog": "Chien d'eau Portugais",
+        "prague_ratter": "Ratier de Prague",
+        "pug": "Carlin",
+        "pyrenean_shepherd": "Berger des Pyrénées",
+        "ragdoll": "Ragdoll",
+        "rhodesian_ridgeback": "Rhodesian Ridgeback",
+        "rottweiler": "Rottweiler",
+        "russian_blue": "Bleu Russe",
+        "russian_european_laika": "Laïka Russo-Européen",
+        "saarloos_wolfdog": "Chien-loup de Saarloos",
+        "sacred_birman": "Sacré de Birmanie",
+        "saint_bernard": "Saint Bernard",
+        "saluki": "Saluki",
+        "samoyed": "Samoyède",
+        "savannah": "Savannah",
+        "scottish_deerhound": "Levrier Ecossais",
+        "scottish_fold": "Scottish Fold",
+        "shetland_sheepdog": "Berger des Shetland",
+        "shiba_inu": "Shiba Inu",
+        "shih_tzu": "Shih Tzu",
+        "siamese": "Siamois",
+        "siberian": "Sibérien",
+        "siberian_husky": "Husky de Sibérie",
+        "snowshoe": "Snow shoe",
+        "somali": "Somali",
+        "spanish_greyhound": "Lévrier Espagnol",
+        "spanish_mastiff": "Mâtin Espagnol (Spanish Mastiff)",
+        "spanish_water_dog": "Chien d'eau Espagnol",
+        "sphynx": "Sphynx",
+        "standard_pinscher": "Pinscher Moyen",
+        "standard_poodle": "Caniche Grand",
+        "swedish_elkhound": "Chien d'élan Suédois",
+        "thai": "Thaï",
+        "tibetan_mastiff": "Dogue du Tibet (Tibetan Mastiff)",
+        "tibetan_spaniel": "Épagneul Tibétain",
+        "tonkinese": "Tonkinois",
+        "toy_poodle": "Caniche Toy",
+        "turkish_angora": "Angora Turc",
+        "turkish_van": "Turc de Van",
+        "vizsla": "Braque hongrois",
+        "weimaraner": "Braque de Weimar",
+        "west_siberian_laika": "Laïka de Sibérie occidentale",
+        "white_swiss_shepherd": "Berger Blanc Suisse",
+        "wirehaired_pointing_griffon": "Griffon Korthals"
+      }
+    },
+    "living_environment": {
+      "options": {
+        "indoors": "À l'intérieur",
+        "outdoors_summer": "À l'extérieur l'été",
+        "outdoors_summer_20": "À l'extérieur l'été (vers +20°C)",
+        "outdoors_summer_30": "À l'extérieur l'été (> +30°C)",
+        "outdoors_winter": "À l'extérieur l'hiver",
+        "outdoors_winter_0": "À l'extérieur l'hiver (< 0°C)",
+        "outdoors_winter_10": "À l'extérieur l'hiver (+10°C)"
+      }
+    },
     "morphology": {
       "options": {
-        "1_very_thin": "Très mince",
-        "2_underweight": "Insuffisance pondérale",
-        "3_slightly_underweight": "Légèrement maigre",
-        "4_ideal": "Idéal",
-        "5_ideal": "Idéal",
-        "6_slightly_overweight": "Légèrement en surpoids",
-        "7_overweight": "Surpoids",
-        "8_obese": "Obèse",
-        "9_very_obese": "Très obèse"
+        "1_very_thin": "1 - Très mince",
+        "2_underweight": "2 - Insuffisance pondérale",
+        "3_slightly_underweight": "3 - Légèrement maigre",
+        "4_ideal": "4 - Idéal",
+        "5_ideal": "5 - Idéal",
+        "6_slightly_overweight": "6 - Légèrement en surpoids",
+        "7_overweight": "7 - Surpoids",
+        "8_obese": "8 - Obèse",
+        "9_very_obese": "9 - Très obèse"
+      }
+    },
+    "reproductive_status": {
+      "options": {
+        "intact": "Entier",
+        "neutered": "Castré",
+        "spayed": "Stérilisée"
+      }
+    },
+    "temperament": {
+      "options": {
+        "active": "Actif",
+        "calm": "Calme",
+        "highly_stressed": "Très stressé",
+        "normal": "Normal",
+        "slightly_stressed": "Un peu stressé",
+        "stressed": "Stressé",
+        "very_calm": "Très calme"
       }
     }
   },
@@ -64,6 +329,9 @@
           "9_very_obese": "Très obèse",
           "unavailable": "Indisponible"
         }
+      },
+      "energy_need": {
+        "name": "Besoin énergétique"
       },
       "ideal_weight": {"name": "Poids Idéal"},
       "last_measurement_time": { "name": "Dernière heure de pesée" },
@@ -119,11 +387,13 @@
     "step": {
       "init": {
         "data": {
+          "living_environment": "Lieu de vie",
           "morphology": "Morphologie",
           "last_time_sensor": "Capteur de la dernière pesée",
           "weight_sensor": "Capteur de poids"
         },
         "data_description": {
+          "living_environment": "Sélectionnez le lieu de vie de votre animal.",
           "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus](https://dckiller51.github.io/bodypetscale/)",
           "last_time_sensor": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide."
         }

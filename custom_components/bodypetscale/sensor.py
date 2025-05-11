@@ -23,16 +23,25 @@ from homeassistant.helpers.update_coordinator import (
 
 from .const import (
     ATTR_BODY_TYPE,
+    ATTR_ENERGY_NEED,
     ATTR_IDEAL,
     ATTR_MAIN,
+    CONF_ACTIVITY,
     CONF_ANIMAL_TYPE,
+    CONF_APPETITE,
+    CONF_BIRTHDAY,
+    CONF_BREED,
     CONF_LAST_TIME_SENSOR,
+    CONF_LIVING_ENVIRONMENT,
     CONF_MORPHOLOGY,
+    CONF_REPRODUCTIVE,
+    CONF_TEMPERAMENT,
     CONF_WEIGHT_SENSOR,
     DOMAIN,
     VERSION,
 )
 from .coordinator import BodyPetScaleCoordinator
+
 from .util import get_config_option
 
 _LOGGER = logging.getLogger(__name__)
@@ -60,6 +69,14 @@ SENSORS = [
         icon="mdi:weight",
     ),
     SensorEntityDescription(
+        key=ATTR_ENERGY_NEED,
+        name="Energy need",
+        translation_key="energy_need",
+        icon="mdi:food-croissant",
+        native_unit_of_measurement="kcal",
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    SensorEntityDescription(
         key=CONF_LAST_TIME_SENSOR,
         translation_key="last_measurement_time",
         device_class=SensorDeviceClass.TIMESTAMP,
@@ -83,9 +100,16 @@ class BasePetSensor(CoordinatorEntity, SensorEntity):
         super().__init__(coordinator)
         self.entity_description = description
         self._attr_unique_id = f"{config_entry.entry_id}_{description.key}"
-        self._animal_type = get_config_option(config_entry, CONF_ANIMAL_TYPE, "unknown")
+        self._activity = get_config_option(config_entry, CONF_ACTIVITY)
+        self._appetite = get_config_option(config_entry, CONF_APPETITE)
+        self._animal_type = get_config_option(config_entry, CONF_ANIMAL_TYPE)
+        self._birthday = get_config_option(config_entry, CONF_BIRTHDAY)
+        self._breed = get_config_option(config_entry, CONF_BREED)
         self._last_time_sensor = config_entry.options.get(CONF_LAST_TIME_SENSOR)
-        self._morphology = config_entry.options.get(CONF_MORPHOLOGY, "default_value")
+        self._living_environment = get_config_option(config_entry, CONF_LIVING_ENVIRONMENT)
+        self._morphology = config_entry.options.get(CONF_MORPHOLOGY)
+        self._reproductive = get_config_option(config_entry, CONF_REPRODUCTIVE)
+        self._temperament = get_config_option(config_entry, CONF_TEMPERAMENT)
         self._weight_sensor = config_entry.options.get(CONF_WEIGHT_SENSOR)
 
         if not self._weight_sensor:
@@ -197,15 +221,11 @@ class MainSensor(BasePetSensor):
         return "mdi:scale"
 
 
-async def async_setup_entry(
-    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
-) -> None:
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
     """Configure the sensor platform for BodyPetScale."""
-    # Extract configuration information
     weight_sensor = entry.options.get(CONF_WEIGHT_SENSOR)
-    last_time_sensor = entry.options.get(
-        CONF_LAST_TIME_SENSOR
-    )  # Retrieve the optional sensor
+    last_time_sensor = entry.options.get(CONF_LAST_TIME_SENSOR)
+
     if not weight_sensor:
         _LOGGER.error("The weight sensor is missing in the configuration entry")
         return
@@ -220,7 +240,7 @@ async def async_setup_entry(
 
     main_sensor = MainSensor(coordinator, entry)
 
-    metric_keys = [CONF_WEIGHT_SENSOR, ATTR_IDEAL, ATTR_BODY_TYPE]
+    metric_keys = [CONF_WEIGHT_SENSOR, ATTR_IDEAL, ATTR_BODY_TYPE, ATTR_ENERGY_NEED]
 
     if last_time_sensor:
         metric_keys.append(CONF_LAST_TIME_SENSOR)

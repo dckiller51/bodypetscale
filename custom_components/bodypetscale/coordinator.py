@@ -10,7 +10,7 @@ from homeassistant.util import dt as dt_util
 from homeassistant.util.dt import parse_datetime
 
 from .const import CONF_LAST_TIME_SENSOR, CONF_WEIGHT_SENSOR
-from .util import calculate_ideal_weight, PetScaleConfig
+from .util import calculate_energy_need, calculate_ideal_weight, EnergyConfig, get_cat_age_stage, get_dog_age_stage, PetScaleConfig
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -60,12 +60,20 @@ class BodyPetScaleCoordinator(DataUpdateCoordinator):
         """Fetch and calculate data for pet scale sensors."""
         weight = await _get_state_as_float(self.hass, self.config.weight_sensor)
         last_time = await _get_state_as_string(self.hass, self.config.last_time_sensor) if self.config.last_time_sensor else None
-        tz = dt_util.DEFAULT_TIME_ZONE
 
         data: dict[str, Any] = {
             CONF_WEIGHT_SENSOR: weight,
         }
 
+        self._process_weight_data(weight, data)
+        self._process_last_time_data(last_time, data)
+
+        if weight is not None and data.get("ideal_weight") is not None:
+            self._process_energy_need(weight, data)
+
+        return data
+
+    def _process_weight_data(self, weight: Optional[float], data: dict[str, Any]) -> None:
         if weight is not None:
             data["ideal_weight"] = calculate_ideal_weight(weight, self.config.morphology, self.config.animal_type)
             data["body_type"] = self.config.morphology
@@ -73,20 +81,53 @@ class BodyPetScaleCoordinator(DataUpdateCoordinator):
             data["ideal_weight"] = None
             data["body_type"] = None
 
-        if last_time is not None:
-            if isinstance(last_time, str):
-                try:
-                    dt = parse_datetime(last_time)
-                    if dt:
-                        self._last_time = dt.astimezone(tz)
-                        data[CONF_LAST_TIME_SENSOR] = self._last_time
-                    else:
-                        _LOGGER.warning("Conversion error for 'last_time': %s", last_time)
-                        data[CONF_LAST_TIME_SENSOR] = None
-                except ValueError as e:
-                    _LOGGER.warning("Invalid format for 'last_time': %s - %s", last_time, e)
-                    data[CONF_LAST_TIME_SENSOR] = None
-        else:
+    def _process_last_time_data(self, last_time_str: Optional[str], data: dict[str, Any]) -> None:
+        if not last_time_str:
+            data[CONF_LAST_TIME_SENSOR] = None
+            return
+
+        try:
+            dt = parse_datetime(last_time_str)
+            if dt:
+                self._last_time = dt.astimezone(dt_util.DEFAULT_TIME_ZONE)
+                data[CONF_LAST_TIME_SENSOR] = self._last_time
+            else:
+                _LOGGER.warning("Conversion error for 'last_time': %s", last_time_str)
+                data[CONF_LAST_TIME_SENSOR] = None
+        except ValueError as e:
+            _LOGGER.warning("Invalid format for 'last_time': %s - %s", last_time_str, e)
             data[CONF_LAST_TIME_SENSOR] = None
 
-        return data
+    def _process_energy_need(self, weight: float, data: dict[str, Any]) -> None:
+        if self.config.animal_type == "cat":
+            life_stage = get_cat_age_stage(self.config.birthday)
+        elif self.config.animal_type == "dog":
+            life_stage = get_dog_age_stage(self.config.birthday, weight)
+        else:
+            _LOGGER.warning("Unknown animal type: %s", self.config.animal_type)
+            return
+
+        if not life_stage:
+            _LOGGER.warning("Invalid life_stage for %s, cannot calculate energy need.", self.config.animal_type)
+            return
+
+        ideal_weight = data.get("ideal_weight")
+        if ideal_weight is None:
+            _LOGGER.warning("Ideal weight is None, cannot calculate energy need.")
+            return
+
+        config = EnergyConfig(
+            animal_type=self.config.animal_type,
+            breed=self.config.breed,
+            life_stage=life_stage,
+            activity=self.config.activity,
+            reproductive=self.config.reproductive,
+            morphology=self.config.morphology,
+            environment=self.config.environment,
+            appetite=self.config.appetite,
+            temperament=self.config.temperament,
+        )
+
+        energy_need = calculate_energy_need(config, ideal_weight)
+
+        data["energy_need"] = energy_need
