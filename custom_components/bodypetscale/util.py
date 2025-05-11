@@ -3,7 +3,7 @@
 import logging
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 
@@ -27,6 +27,7 @@ _LOGGER = logging.getLogger(__name__)
 @dataclass
 class EnergyConfig:
     """Subset of config used to calculate energy needs."""
+
     animal_type: str
     breed: str
     life_stage: str
@@ -34,15 +35,16 @@ class EnergyConfig:
     reproductive: str
     morphology: str
     environment: str
-    appetite: Optional[str] = None
-    temperament: Optional[str] = None
+    appetite: str | None = None
+    temperament: str | None = None
 
 
 @dataclass
 class PetScaleConfig:
     """Configuration container for BodyPetScale coordinator."""
+
     weight_sensor: str
-    last_time_sensor: Optional[str]
+    last_time_sensor: str | None
     activity: str
     appetite: str
     animal_type: str
@@ -55,7 +57,9 @@ class PetScaleConfig:
     temperament: str
 
 
-def calculate_ideal_weight(weight: Optional[float], morphology: Optional[str], animal_type: Optional[str]) -> Optional[float]:
+def calculate_ideal_weight(
+    weight: float | None, morphology: str | None, animal_type: str | None
+) -> float | None:
     """Calculate ideal weight based on morphology and animal type."""
     if weight is None or not morphology or not animal_type:
         return None
@@ -63,9 +67,7 @@ def calculate_ideal_weight(weight: Optional[float], morphology: Optional[str], a
     try:
         morph_index = int(morphology.split("_")[0])
     except (ValueError, IndexError):
-        _LOGGER.warning(
-            "Unable to extract morphology index from %s", morphology
-        )
+        _LOGGER.warning("Unable to extract morphology index from %s", morphology)
         return None
 
     if morph_index not in MORPHOLOGY_PERCENTAGES:
@@ -142,7 +144,9 @@ def get_common_energy_factor(config: EnergyConfig) -> float:
     """Calculate the common energy factor for cats or dogs."""
 
     if config.animal_type not in ("cat", "dog"):
-        raise ValueError(f"Invalid animal_type '{config.animal_type}' (must be 'cat' or 'dog').")
+        raise ValueError(
+            f"Invalid animal_type '{config.animal_type}' (must be 'cat' or 'dog')."
+        )
 
     try:
         breed_factor = BREED_FACTORS[config.breed]
@@ -192,23 +196,38 @@ def get_common_energy_factor(config: EnergyConfig) -> float:
 def calculate_energy_need(
     config: EnergyConfig,
     ideal_weight: float,
-) -> Optional[int]:
+) -> int | None:
     """Calculate energy need for a pet based on multiple factors."""
 
     if config.animal_type == "cat":
-        required = [config.activity, config.breed, config.life_stage,
-                    config.environment, config.reproductive,
-                    config.morphology, config.temperament]
+        required = [
+            config.activity,
+            config.breed,
+            config.life_stage,
+            config.environment,
+            config.reproductive,
+            config.morphology,
+            config.temperament,
+        ]
     elif config.animal_type == "dog":
-        required = [config.activity, config.breed, config.life_stage,
-                    config.environment, config.reproductive,
-                    config.morphology, config.appetite]
+        required = [
+            config.activity,
+            config.breed,
+            config.life_stage,
+            config.environment,
+            config.reproductive,
+            config.morphology,
+            config.appetite,
+        ]
     else:
         _LOGGER.error("Invalid animal type: %s", config.animal_type)
         return None
 
     if not all(required):
-        _LOGGER.error("One or more required configuration values are missing for %s.", config.animal_type)
+        _LOGGER.error(
+            "One or more required configuration values are missing for %s.",
+            config.animal_type,
+        )
         return None
 
     try:
@@ -218,13 +237,13 @@ def calculate_energy_need(
         return None
 
     if config.animal_type == "cat":
-        base_energy = 100 * (ideal_weight ** 0.667)
+        base_energy = 100 * (ideal_weight**0.667)
         energy_need = round(total_factor * base_energy, 0)
     else:
         if ideal_weight < 21:
-            base_energy = (ideal_weight ** 0.75) * 120
+            base_energy = (ideal_weight**0.75) * 120
         else:
-            base_energy = (ideal_weight ** 0.667) * 156
+            base_energy = (ideal_weight**0.667) * 156
         energy_need = base_energy * total_factor
 
     return int(round(energy_need))

@@ -7,15 +7,15 @@
     "step": {
       "options": {
         "data": {
+          "last_time_sensor": "Capteur de la dernière pesée",
           "living_environment": "Lieu de vie",
           "morphology": "Morphologie",
-          "last_time_sensor": "Capteur de la dernière pesée",
           "weight_sensor": "Capteur de poids"
         },
         "data_description": {
+          "last_time_sensor": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide.",
           "living_environment": "Sélectionnez le lieu de vie de votre animal.",
-          "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus](https://dckiller51.github.io/bodypetscale/)",
-          "last_time_sensor": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide."
+          "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus](https://dckiller51.github.io/bodypetscale/)"
         }
       },
       "profile": {
@@ -36,12 +36,99 @@
       },
       "user": {
         "data": {
-          "name": "Nom",
           "animal_type": "Type d'animal",
-          "birthday": "Date d'anniversaire"
+          "birthday": "Date d'anniversaire",
+          "name": "Nom"
         },
         "data_description": {
           "animal_type": "Sélectionnez le type d'animal."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "body_type": {
+        "name": "Corpulence",
+        "state": {
+          "1_very_thin": "Très mince",
+          "2_underweight": "Insuffisance pondérale",
+          "3_slightly_underweight": "Légèrement maigre",
+          "4_ideal": "Idéal",
+          "5_ideal": "Idéal",
+          "6_slightly_overweight": "Légèrement en surpoids",
+          "7_overweight": "Surpoids",
+          "8_obese": "Obèse",
+          "9_very_obese": "Très obèse",
+          "unavailable": "Indisponible"
+        }
+      },
+      "energy_need": {
+        "name": "Besoin énergétique"
+      },
+      "ideal_weight": { "name": "Poids Idéal" },
+      "last_measurement_time": { "name": "Dernière heure de pesée" },
+      "main": {
+        "name": "Principal",
+        "state": {
+          "ok": "OK",
+          "problem": "Problème",
+          "unavailable": "Indisponible"
+        },
+        "state_attributes": {
+          "animal_type": {
+            "name": "Type d'animal",
+            "state": {
+              "cat": "Chat",
+              "dog": "Chien"
+            }
+          },
+          "body_type": {
+            "name": "Corpulence",
+            "state": {
+              "1_very_thin": "Très mince",
+              "2_underweight": "Insuffisance pondérale",
+              "3_slightly_underweight": "Légèrement maigre",
+              "4_ideal": "Idéal",
+              "5_ideal": "Idéal",
+              "6_slightly_overweight": "Légèrement en surpoids",
+              "7_overweight": "Surpoids",
+              "8_obese": "Obèse",
+              "9_very_obese": "Très obèse",
+              "unavailable": "Indisponible"
+            }
+          },
+          "ideal_weight": { "name": "Poids Idéal" },
+          "issue": {
+            "name": "Problème",
+            "state": {
+              "last_time_invalid": "Dernière mesure invalide",
+              "last_time_unavailable": "Dernière mesure indisponible",
+              "weight_high": "Poids élevé",
+              "weight_low": "Poids faible",
+              "weight_unavailable": "Poids indisponible"
+            }
+          },
+          "last_measurement_time": { "name": "Dernière heure de pesée" },
+          "weight": { "name": "Poids" }
+        }
+      },
+      "weight": { "name": "Poids" }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "last_time_sensor": "Capteur de la dernière pesée",
+          "living_environment": "Lieu de vie",
+          "morphology": "Morphologie",
+          "weight_sensor": "Capteur de poids"
+        },
+        "data_description": {
+          "last_time_sensor": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide.",
+          "living_environment": "Sélectionnez le lieu de vie de votre animal.",
+          "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus](https://dckiller51.github.io/bodypetscale/)"
         }
       }
     }
@@ -54,16 +141,16 @@
         "convalescent": "Convalescence",
         "hyperactive_very_sporty": "Hyperactif / grand sportif (+2h)",
         "limited_outdoor_access": "Accès limité à l'extérieur (< 12h)",
-        "normal":"Normal (1h de sortie)",
         "no_outdoor_access": "Pas d'accès à l'extérieur",
+        "normal": "Normal (1h de sortie)",
         "outdoor_access": "Accès à l'extérieur (> 12h)",
         "very_calm": "Très calme (que le jardin)"
       }
     },
     "animal_type": {
       "options": {
-        "dog": "Chien",
-        "cat": "Chat"
+        "cat": "Chat",
+        "dog": "Chien"
       }
     },
     "appetite": {
@@ -76,8 +163,8 @@
     "breed_options": {
       "options": {
         "abyssinian": "Abyssin",
-        "afghan_hound": "Lévrier Afghan",
         "affenpinscher": "Affenpinscher",
+        "afghan_hound": "Lévrier Afghan",
         "akita_inu": "Akita Inu",
         "alaskan_malamute": "Malamute de l'Alaska",
         "american_akita": "Akita Américain",
@@ -88,13 +175,13 @@
         "american_shepherd": "Berger Américain",
         "american_shorthair": "American Shorthair",
         "american_staffordshire_terrier": "American Staffordshire Terrier",
+        "american_wirehair": "American Wirehair",
         "anatolian_shepherd_dog": "Berger d'Anatolie",
         "ardennes_cattle_dog": "Bouvier des Ardennes",
         "ariegeois": "Ariegeois",
         "australian_cattle_dog": "Bouvier Australien",
         "australian_kelpie": "Kelpie Australien",
         "australian_shepherd": "Berger Australien",
-        "american_wirehair": "American Wirehair",
         "azawakh": "Azawakh",
         "balinese": "Balinais",
         "basset_artesien_normand": "Basset Artésien Normand",
@@ -169,8 +256,8 @@
         "fox_terrier": "Fox Terrier",
         "french_bulldog": "Bouledogue Français",
         "french_pointer": "Braque Français",
-        "german_shepherd": "Berger Allemand",
         "german_pointer": "Braque Allemand",
+        "german_shepherd": "Berger Allemand",
         "golden_retriever": "Golden Retriever",
         "great_dane": "Dogue allemand",
         "great_pyrenees": "Montagne des Pyrénées",
@@ -310,93 +397,6 @@
         "slightly_stressed": "Un peu stressé",
         "stressed": "Stressé",
         "very_calm": "Très calme"
-      }
-    }
-  },
-  "entity": {
-    "sensor": {
-      "body_type": {
-        "name": "Corpulence",
-        "state": {
-          "1_very_thin": "Très mince",
-          "2_underweight": "Insuffisance pondérale",
-          "3_slightly_underweight": "Légèrement maigre",
-          "4_ideal": "Idéal",
-          "5_ideal": "Idéal",
-          "6_slightly_overweight": "Légèrement en surpoids",
-          "7_overweight": "Surpoids",
-          "8_obese": "Obèse",
-          "9_very_obese": "Très obèse",
-          "unavailable": "Indisponible"
-        }
-      },
-      "energy_need": {
-        "name": "Besoin énergétique"
-      },
-      "ideal_weight": {"name": "Poids Idéal"},
-      "last_measurement_time": { "name": "Dernière heure de pesée" },
-      "main": {
-        "name": "Principal",
-        "state": {
-          "ok": "OK",
-          "problem": "Problème",
-          "unavailable": "Indisponible"
-        },
-        "state_attributes": {
-          "animal_type": {
-            "name": "Type d'animal",
-            "state": {
-              "cat": "Chat",
-              "dog": "Chien"
-            }
-          },
-          "body_type": {
-            "name": "Corpulence",
-            "state": {
-              "1_very_thin": "Très mince",
-              "2_underweight": "Insuffisance pondérale",
-              "3_slightly_underweight": "Légèrement maigre",
-              "4_ideal": "Idéal",
-              "5_ideal": "Idéal",
-              "6_slightly_overweight": "Légèrement en surpoids",
-              "7_overweight": "Surpoids",
-              "8_obese": "Obèse",
-              "9_very_obese": "Très obèse",
-              "unavailable": "Indisponible"
-            }
-          },
-          "ideal_weight": {"name": "Poids Idéal"},
-          "issue": {
-            "name": "Problème",
-            "state": {
-              "last_time_invalid": "Dernière mesure invalide",
-              "last_time_unavailable": "Dernière mesure indisponible",
-              "weight_unavailable": "Poids indisponible",
-              "weight_low": "Poids faible",
-              "weight_high": "Poids élevé"
-            }
-          },
-          "last_measurement_time": { "name": "Dernière heure de pesée" },
-          "weight": { "name": "Poids" }
-        }
-      },
-      "weight": { "name": "Poids" }
-    }
-  },
-  "options": {
-    "step": {
-      "init": {
-        "data": {
-          "living_environment": "Lieu de vie",
-          "morphology": "Morphologie",
-          "last_time_sensor": "Capteur de la dernière pesée",
-          "weight_sensor": "Capteur de poids"
-        },
-        "data_description": {
-          "living_environment": "Sélectionnez le lieu de vie de votre animal.",
-          "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus](https://dckiller51.github.io/bodypetscale/)",
-          "last_time_sensor": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide."
-        }
       }
     }
   },

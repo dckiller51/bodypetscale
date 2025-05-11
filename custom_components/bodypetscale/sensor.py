@@ -1,13 +1,13 @@
 """Sensor platform for BodyPetScale."""
 
 import logging
-from typing import Any, Dict
 from datetime import datetime
+from typing import Any
 
 from homeassistant.components.sensor import (
+    SensorDeviceClass,
     SensorEntity,
     SensorEntityDescription,
-    SensorDeviceClass,
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
@@ -41,7 +41,6 @@ from .const import (
     VERSION,
 )
 from .coordinator import BodyPetScaleCoordinator
-
 from .util import get_config_option
 
 _LOGGER = logging.getLogger(__name__)
@@ -52,7 +51,7 @@ SENSORS = [
         translation_key="weight",
         native_unit_of_measurement=UnitOfMass.KILOGRAMS,
         device_class=SensorDeviceClass.WEIGHT,
-        state_class=SensorStateClass.MEASUREMENT
+        state_class=SensorStateClass.MEASUREMENT,
     ),
     SensorEntityDescription(
         key=ATTR_IDEAL,
@@ -106,7 +105,9 @@ class BasePetSensor(CoordinatorEntity, SensorEntity):
         self._birthday = get_config_option(config_entry, CONF_BIRTHDAY)
         self._breed = get_config_option(config_entry, CONF_BREED)
         self._last_time_sensor = config_entry.options.get(CONF_LAST_TIME_SENSOR)
-        self._living_environment = get_config_option(config_entry, CONF_LIVING_ENVIRONMENT)
+        self._living_environment = get_config_option(
+            config_entry, CONF_LIVING_ENVIRONMENT
+        )
         self._morphology = config_entry.options.get(CONF_MORPHOLOGY)
         self._reproductive = get_config_option(config_entry, CONF_REPRODUCTIVE)
         self._temperament = get_config_option(config_entry, CONF_TEMPERAMENT)
@@ -126,6 +127,14 @@ class BasePetSensor(CoordinatorEntity, SensorEntity):
 
     @property
     def native_value(self) -> Any:
+        """Return the native value of the sensor.
+
+        This method retrieves the current value of the sensor from the coordinator's data.
+        The value is logged for debugging purposes.
+
+        Returns:
+            The current value of the sensor, or None if the value is not available.
+        """
         value = self.coordinator.data.get(self.entity_description.key)
         _LOGGER.debug("Sensor %s has value: %s", self.entity_description.key, value)
         return value
@@ -138,7 +147,9 @@ class PetMetricSensor(BasePetSensor):
 class MainSensor(BasePetSensor):
     """Main sensor that represents the global pet status."""
 
-    def __init__(self, coordinator: BodyPetScaleCoordinator, config_entry: ConfigEntry) -> None:
+    def __init__(
+        self, coordinator: BodyPetScaleCoordinator, config_entry: ConfigEntry
+    ) -> None:
         """Initialize the MainSensor."""
         description = SensorEntityDescription(
             key=ATTR_MAIN,
@@ -194,9 +205,11 @@ class MainSensor(BasePetSensor):
         return result
 
     @property
-    def extra_state_attributes(self) -> Dict[str, Any]:
+    def extra_state_attributes(self) -> dict[str, Any]:
         """Return extra state attributes."""
-        _LOGGER.debug("MainSensor last_measurement_time: %s", self.coordinator.last_time)
+        _LOGGER.debug(
+            "MainSensor last_measurement_time: %s", self.coordinator.last_time
+        )
         attrs = {
             "animal_type": self._animal_type,
             "body_type": self.coordinator.data.get("body_type"),
@@ -221,7 +234,9 @@ class MainSensor(BasePetSensor):
         return "mdi:scale"
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
+async def async_setup_entry(
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+) -> None:
     """Configure the sensor platform for BodyPetScale."""
     weight_sensor = entry.options.get(CONF_WEIGHT_SENSOR)
     last_time_sensor = entry.options.get(CONF_LAST_TIME_SENSOR)
@@ -245,10 +260,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     if last_time_sensor:
         metric_keys.append(CONF_LAST_TIME_SENSOR)
 
-    metric_sensors = [
-        desc for desc in SENSORS
-        if desc.key in metric_keys
-    ]
+    metric_sensors = [desc for desc in SENSORS if desc.key in metric_keys]
 
     sensor_entities = [
         PetMetricSensor(coordinator, entry, desc) for desc in metric_sensors
