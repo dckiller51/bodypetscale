@@ -8,8 +8,8 @@ from homeassistant.core import HomeAssistant
 
 from .const import (
     CONF_ACTIVITY,
-    CONF_APPETITE,
     CONF_ANIMAL_TYPE,
+    CONF_APPETITE,
     CONF_BIRTHDAY,
     CONF_BREED,
     CONF_LAST_TIME_SENSOR,
@@ -21,7 +21,7 @@ from .const import (
     STARTUP_MESSAGE,
 )
 from .coordinator import BodyPetScaleCoordinator
-from .util import get_config_option, PetScaleConfig
+from .util import PetScaleConfig, get_config_option
 
 PLATFORMS = [Platform.SENSOR]
 _LOGGER = logging.getLogger(__name__)

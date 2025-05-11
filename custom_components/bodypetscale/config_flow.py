@@ -7,8 +7,12 @@ from types import MappingProxyType
 from typing import Any
 
 import voluptuous as vol
-
-from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResult, OptionsFlow
+from homeassistant.config_entries import (
+    ConfigEntry,
+    ConfigFlow,
+    ConfigFlowResult,
+    OptionsFlow,
+)
 from homeassistant.const import CONF_NAME
 from homeassistant.helpers import selector
 
@@ -18,8 +22,8 @@ from .const import (
     BREED_OPTIONS,
     CAT_TEMPERAMENT_OPTIONS,
     CONF_ACTIVITY,
-    CONF_APPETITE,
     CONF_ANIMAL_TYPE,
+    CONF_APPETITE,
     CONF_BIRTHDAY,
     CONF_BREED,
     CONF_LAST_TIME_SENSOR,
@@ -65,18 +69,24 @@ def get_options_schema(
     )
 
     weight_suggest = defaults.get(CONF_WEIGHT_SENSOR)
-    schema[vol.Required(
-        CONF_WEIGHT_SENSOR,
-        description={"suggested_value": weight_suggest} if weight_suggest else None
-    )] = selector.EntitySelector(
+    schema[
+        vol.Required(
+            CONF_WEIGHT_SENSOR,
+            description={"suggested_value": weight_suggest} if weight_suggest else None,
+        )
+    ] = selector.EntitySelector(
         selector.EntitySelectorConfig(domain=["sensor", "input_number", "number"])
     )
 
     last_time_suggest = defaults.get(CONF_LAST_TIME_SENSOR)
-    schema[vol.Optional(
-        CONF_LAST_TIME_SENSOR,
-        description={"suggested_value": last_time_suggest} if last_time_suggest else None
-    )] = selector.EntitySelector(
+    schema[
+        vol.Optional(
+            CONF_LAST_TIME_SENSOR,
+            description=(
+                {"suggested_value": last_time_suggest} if last_time_suggest else None
+            ),
+        )
+    ] = selector.EntitySelector(
         selector.EntitySelectorConfig(domain=["sensor", "input_datetime"])
     )
 
@@ -176,11 +186,13 @@ class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):
         }
 
         if animal_type == "cat":
-            profile_schema_dict[vol.Required(CONF_TEMPERAMENT)] = selector.SelectSelector(
-                selector.SelectSelectorConfig(
-                    options=CAT_TEMPERAMENT_OPTIONS,
-                    mode=selector.SelectSelectorMode.DROPDOWN,
-                    translation_key="temperament",
+            profile_schema_dict[vol.Required(CONF_TEMPERAMENT)] = (
+                selector.SelectSelector(
+                    selector.SelectSelectorConfig(
+                        options=CAT_TEMPERAMENT_OPTIONS,
+                        mode=selector.SelectSelectorMode.DROPDOWN,
+                        translation_key="temperament",
+                    )
                 )
             )
         elif animal_type == "dog":
@@ -253,7 +265,9 @@ class BodyPetScaleOptionsFlow(OptionsFlow):
             _LOGGER.info("Updating BodyPetScale options: %s", user_input)
             return self.async_create_entry(data=user_input)
 
-        animal_type = self.hass.data[DOMAIN][self.config_entry.entry_id].config.animal_type
+        animal_type = self.hass.data[DOMAIN][
+            self.config_entry.entry_id
+        ].config.animal_type
 
         options_schema = await self.hass.async_add_executor_job(
             get_options_schema, self.config_entry.options, animal_type

@@ -7,15 +7,15 @@
     "step": {
       "options": {
         "data": {
+          "last_time_sensor": "Last measurement time sensor",
           "living_environment": "Living environment",
           "morphology": "Morphology",
-          "last_time_sensor": "Last measurement time sensor",
           "weight_sensor": "Weight sensor"
         },
         "data_description": {
+          "last_time_sensor": "If you do not have a last weigh time sensor, leave this field blank.",
           "living_environment": "Select the living environment of your animal.",
-          "morphology": "Select the morphology of your animal. [Learn more](https://dckiller51.github.io/bodypetscale/)",
-          "last_time_sensor": "If you do not have a last weigh time sensor, leave this field blank."
+          "morphology": "Select the morphology of your animal. [Learn more](https://dckiller51.github.io/bodypetscale/)"
         }
       },
       "profile": {
@@ -36,12 +36,99 @@
       },
       "user": {
         "data": {
-          "name": "Name",
           "animal_type": "Animal type",
-          "birthday": "Birthday"
+          "birthday": "Birthday",
+          "name": "Name"
         },
         "data_description": {
           "animal_type": "Select the type of animal."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "body_type": {
+        "name": "Body Type",
+        "state": {
+          "1_very_thin": "Very Thin",
+          "2_underweight": "Underweight",
+          "3_slightly_underweight": "Slightly Underweight",
+          "4_ideal": "Ideal",
+          "5_ideal": "Ideal",
+          "6_slightly_overweight": "Slightly Overweight",
+          "7_overweight": "Overweight",
+          "8_obese": "Obese",
+          "9_very_obese": "Very obese",
+          "unavailable": "Unavailable"
+        }
+      },
+      "energy_need": {
+        "name": "Energy need"
+      },
+      "ideal_weight": { "name": "Ideal Weight" },
+      "last_measurement_time": { "name": "Last measurement time" },
+      "main": {
+        "name": "Main",
+        "state": {
+          "ok": "OK",
+          "problem": "Problem",
+          "unavailable": "Unavailable"
+        },
+        "state_attributes": {
+          "animal_type": {
+            "name": "Animal type",
+            "state": {
+              "cat": "Cat",
+              "dog": "Dog"
+            }
+          },
+          "body_type": {
+            "name": "Body type",
+            "state": {
+              "1_very_thin": "Very Thin",
+              "2_underweight": "Underweight",
+              "3_slightly_underweight": "Slightly Underweight",
+              "4_ideal": "Ideal",
+              "5_ideal": "Ideal",
+              "6_slightly_overweight": "Slightly Overweight",
+              "7_overweight": "Overweight",
+              "8_obese": "Obese",
+              "9_very_obese": "Very Obese",
+              "unavailable": "Unavailable"
+            }
+          },
+          "ideal_weight": { "name": "Ideal Weight" },
+          "issue": {
+            "name": "Issue",
+            "state": {
+              "last_time_invalid": "Last time invalid",
+              "last_time_unavailable": "Last time unavailable",
+              "weight_high": "Weight high",
+              "weight_low": "Weight low",
+              "weight_unavailable": "Weight unavailable"
+            }
+          },
+          "last_measurement_time": { "name": "Last measurement time" },
+          "weight": { "name": "Weight" }
+        }
+      },
+      "weight": { "name": "Weight" }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "last_time_sensor": "Last measurement time sensor",
+          "living_environment": "Living environment",
+          "morphology": "Morphology",
+          "weight_sensor": "Weight sensor"
+        },
+        "data_description": {
+          "last_time_sensor": "If you do not have a last weigh time sensor, leave this field blank.",
+          "living_environment": "Select the living environment of your animal.",
+          "morphology": "Select the morphology of your animal. [Learn more](https://dckiller51.github.io/bodypetscale/)"
         }
       }
     }
@@ -54,16 +141,16 @@
         "convalescent": "Convalescent",
         "hyperactive_very_sporty": "Hyperactive / very sporty (more than 2h walk)",
         "limited_outdoor_access": "Limited outdoor access (< 12h)",
-        "normal":"Normal (1h walk)",
         "no_outdoor_access": "No outdoor access",
+        "normal": "Normal (1h walk)",
         "outdoor_access": "Outdoor access (> 12h)",
         "very_calm": "Very calm (only garden)"
       }
     },
     "animal_type": {
       "options": {
-        "dog": "Dog",
-        "cat": "Cat"
+        "cat": "Cat",
+        "dog": "Dog"
       }
     },
     "appetite": {
@@ -76,8 +163,8 @@
     "breed_options": {
       "options": {
         "abyssinian": "Abyssinian",
-        "afghan_hound": "Afghan Hound",
         "affenpinscher": "Affenpinscher",
+        "afghan_hound": "Afghan Hound",
         "akita_inu": "Akita Inu",
         "alaskan_malamute": "Alaskan Malamute",
         "american_akita": "American Akita",
@@ -88,13 +175,13 @@
         "american_shepherd": "American Shepherd",
         "american_shorthair": "American Shorthair",
         "american_staffordshire_terrier": "American Staffordshire Terrier",
+        "american_wirehair": "American Wirehair",
         "anatolian_shepherd_dog": "Anatolian Shepherd Dog",
         "ardennes_cattle_dog": "Ardennes Cattle Dog",
         "ariegeois": "Ariegeois",
         "australian_cattle_dog": "Australian Cattle Dog",
         "australian_kelpie": "Australian Kelpie",
         "australian_shepherd": "Australian Shepherd",
-        "american_wirehair": "American Wirehair",
         "azawakh": "Azawakh",
         "balinese": "Balinese",
         "basset_artesien_normand": "Basset Artesien Normand",
@@ -169,8 +256,8 @@
         "fox_terrier": "Fox Terrier",
         "french_bulldog": "French Bulldog",
         "french_pointer": "French Pointer",
-        "german_shepherd": "German Shepherd",
         "german_pointer": "German Pointer",
+        "german_shepherd": "German Shepherd",
         "golden_retriever": "Golden Retriever",
         "great_dane": "Great Dane",
         "great_pyrenees": "Great Pyrenees",
@@ -270,6 +357,17 @@
         "wirehaired_pointing_griffon": "Wirehaired Pointing Griffon"
       }
     },
+    "living_environment": {
+      "options": {
+        "indoors": "Indoors",
+        "outdoors_summer": "Outdoors in summer",
+        "outdoors_summer_20": "Outdoors in summer (around 20°C)",
+        "outdoors_summer_30": "Outdoors in summer (> +30°C)",
+        "outdoors_winter": "Outdoors in winter",
+        "outdoors_winter_0": "Outdoors in winter (< 0°C)",
+        "outdoors_winter_10": "Outdoors in winter (+10°C)"
+      }
+    },
     "morphology": {
       "options": {
         "1_very_thin": "1 - Very Thin",
@@ -281,17 +379,6 @@
         "7_overweight": "7 - Overweight",
         "8_obese": "8 - Obese",
         "9_very_obese": "9 - Very Obese"
-      }
-    },
-    "living_environment": {
-      "options": {
-        "indoors": "Indoors",
-        "outdoors_summer": "Outdoors in summer",
-        "outdoors_summer_20": "Outdoors in summer (around 20°C)",
-        "outdoors_summer_30": "Outdoors in summer (> +30°C)",
-        "outdoors_winter": "Outdoors in winter",
-        "outdoors_winter_0": "Outdoors in winter (< 0°C)",
-        "outdoors_winter_10": "Outdoors in winter (+10°C)"
       }
     },
     "reproductive_status": {
@@ -310,93 +397,6 @@
         "slightly_stressed": "Slightly stressed",
         "stressed": "Stressed",
         "very_calm": "Very calm"
-      }
-    }
-  },
-  "entity": {
-    "sensor": {
-      "body_type": {
-        "name": "Body Type",
-        "state": {
-          "1_very_thin": "Very Thin",
-          "2_underweight": "Underweight",
-          "3_slightly_underweight": "Slightly Underweight",
-          "4_ideal": "Ideal",
-          "5_ideal": "Ideal",
-          "6_slightly_overweight": "Slightly Overweight",
-          "7_overweight": "Overweight",
-          "8_obese": "Obese",
-          "9_very_obese": "Very obese",
-          "unavailable": "Unavailable"
-        }
-      },
-      "energy_need": {
-        "name": "Energy need"
-      },
-      "ideal_weight": {"name": "Ideal Weight"},
-      "last_measurement_time": { "name": "Last measurement time" },
-      "main": {
-        "name": "Main",
-        "state": {
-          "ok": "OK",
-          "problem": "Problem",
-          "unavailable": "Unavailable"
-        },
-        "state_attributes": {
-          "animal_type": {
-            "name": "Animal type",
-            "state": {
-              "cat": "Cat",
-              "dog": "Dog"
-            }
-          },
-          "body_type": {
-            "name": "Body type",
-            "state": {
-              "1_very_thin": "Very Thin",
-              "2_underweight": "Underweight",
-              "3_slightly_underweight": "Slightly Underweight",
-              "4_ideal": "Ideal",
-              "5_ideal": "Ideal",
-              "6_slightly_overweight": "Slightly Overweight",
-              "7_overweight": "Overweight",
-              "8_obese": "Obese",
-              "9_very_obese": "Very Obese",
-              "unavailable": "Unavailable"
-            }
-          },
-          "ideal_weight": {"name": "Ideal Weight"},
-          "issue": {
-            "name": "Issue",
-            "state": {
-              "last_time_invalid": "Last time invalid",
-              "last_time_unavailable": "Last time unavailable",
-              "weight_unavailable": "Weight unavailable",
-              "weight_low": "Weight low",
-              "weight_high": "Weight high"
-            }
-          },
-          "last_measurement_time": { "name": "Last measurement time" },
-          "weight": { "name": "Weight" }
-        }
-      },
-      "weight": { "name": "Weight" }
-    }
-  },
-  "options": {
-    "step": {
-      "init": {
-        "data": {
-          "living_environment": "Living environment",
-          "morphology": "Morphology",
-          "last_time_sensor": "Last measurement time sensor",
-          "weight_sensor": "Weight sensor"
-        },
-        "data_description": {
-          "living_environment": "Select the living environment of your animal.",
-          "morphology": "Select the morphology of your animal. [Learn more](https://dckiller51.github.io/bodypetscale/)",
-          "last_time_sensor": "If you do not have a last weigh time sensor, leave this field blank."
-        }
       }
     }
   },

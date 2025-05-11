@@ -1,6 +1,5 @@
 """Data tables module."""
 
-
 ACTIVITY_FACTORS: dict[str, float] = {
     "active_sporty": 1.1,
     "calm": 0.9,
@@ -10,7 +9,7 @@ ACTIVITY_FACTORS: dict[str, float] = {
     "normal": 1.0,
     "no_outdoor_access": 0.9,
     "outdoor_access": 1.1,
-    "very_calm": 0.8
+    "very_calm": 0.8,
 }
 
 APPETITE_FACTORS: dict[str, float] = {
@@ -212,7 +211,7 @@ BREED_FACTORS: dict[str, float] = {
     "weimaraner": 1.1,
     "west_siberian_laika": 0.8,
     "white_swiss_shepherd": 1.0,
-    "wirehaired_pointing_griffon": 1.0
+    "wirehaired_pointing_griffon": 1.0,
 }
 
 CAT_LIFE_STAGE_FACTORS: dict[str, float] = {
@@ -254,7 +253,7 @@ ENVIRONMENT_FACTORS: dict[str, float] = {
     "outdoors_summer_30": 1.2,
     "outdoors_winter": 1.18,
     "outdoors_winter_0": 1.3,
-    "outdoors_winter_10": 1.1
+    "outdoors_winter_10": 1.1,
 }
 
 MORPHOLOGY_FACTORS: dict[str, float] = {
@@ -296,10 +295,10 @@ PUPPY_STAGES = [
     ((36, 51), (6, 7), "puppy_50_6_7"),
     ((36, 51), (8, 13), "puppy_50_8_13"),
     ((36, 51), (14, 18), "puppy_50_14_18"),
-    ((51, float('inf')), (3, 6), "puppy_high_3_6"),
-    ((51, float('inf')), (7, 8), "puppy_high_7_8"),
-    ((51, float('inf')), (9, 13), "puppy_high_9_13"),
-    ((51, float('inf')), (14, 21), "puppy_high_14_21"),
+    ((51, float("inf")), (3, 6), "puppy_high_3_6"),
+    ((51, float("inf")), (7, 8), "puppy_high_7_8"),
+    ((51, float("inf")), (9, 13), "puppy_high_9_13"),
+    ((51, float("inf")), (14, 21), "puppy_high_14_21"),
 ]
 
 REPRODUCTIVE_FACTORS: dict[str, float] = {
