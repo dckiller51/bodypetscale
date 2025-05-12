@@ -1,4 +1,8 @@
-# Bodypetscale
+<p align="center">
+  <img src="https://raw.githubusercontent.com/dckiller51/bodypetscale/main/logo/Logo%20BodyPetScale.png" alt="BodyPetScale Logo" width="150">
+</p>
+
+# BodyPetScale
 
 [![GH-release](https://img.shields.io/github/v/release/dckiller51/bodypetscale.svg?style=flat-square)](https://github.com/dckiller51/bodypetscale/releases)
 [![GH-downloads](https://img.shields.io/github/downloads/dckiller51/bodypetscale/total?style=flat-square)](https://github.com/dckiller51/bodypetscale/releases)
@@ -17,7 +21,7 @@ BodyPetScale uses your pet's weighing data, collected by their sensor and integr
 **Key Points for Dogs and Cats:**
 
 - **Weight Tracking:** Visualize your pet's weight changes over time to quickly detect any significant weight gain or loss, which could be a sign of a health issue.
-- **Ideal Weight (Estimation):** Based on the current weight, this integration may provide you with an estimation of your pet's ideal weight. **However, it is crucial to consult your veterinarian to determine your pet's specific ideal weight.**
+- **Ideal Weight (Estimation):** This integration estimates your pet's ideal weight based on the current weight and some predefined formulas. These estimates serve as a guideline only. **Please always consult a veterinarian for a more accurate determination of your pet's ideal weightt.**
 
 Here's a breakdown of the process:
 
@@ -75,21 +79,35 @@ If you plan to integrate your own last weigh-in sensor, make sure a dedicated se
 ## Configuration
 
 1. Open Home Assistant and go to "Settings" -> "Devices & Services" -> "Add Integration".
-2. Search for "Bodypetscale".
-3. **Personalize your integration:**
-      - **First Name (or other identifier):** Enter your first name or another identifier. **Important:** This identifier will determine the name of your Bodypetscale component in Home Assistant, as well as the names of all sensors created by it. Choose a clear and relevant name.
-      - **Animal type (Cat/Dog):** Select your animal type. This choice may influence the estimation formulas used.
-4. **Select your body type** A link is available to help you choose.
-5. **Select your weight sensor:** Choose the existing weight sensor in Home Assistant (e.g., a `sensor`, or an `input_number`).
-      - **Important Recommendation:** It is **strongly recommended** that each Bodypetscale user has their own dedicated weight sensor. Using a shared weight sensor (e.g., one directly linked to a scale) can cause issues when Home Assistant restarts. This is because Bodypetscale retrieves the sensor's value upon initialization, which can skew calculations if multiple users weigh themselves successively on the same scale before the restart.
-6. **Last measurement time sensor (optional):**
-      If you have a last weigh-in sensor, select it here (e.g., a `sensor`, or an `input_datetime`). This sensor is used to record the date and time of the most recent measurement.
-      Recommendation: Just like the weight and impedance sensors, it is strongly recommended that each user has their own dedicated last weigh-in sensor to prevent conflicts or errors during Home Assistant restarts.
-7. Click "Save".
+2. Search for "Bodypetscale" and click "Install".
+3. **Configure your Pet’s Information:**
 
-**Explanation of choices:**
+   - **First Name (or other identifier):** Enter your first name or another identifier. **Important:** This identifier will determine the names of all sensors created in Home Assistant. Choose a clear and relevant name.
+   - **Animal Type (Cat/Dog):** Select your animal type. This choice may influence the estimation formulas used for energy calculations and other metrics.
+   - **Birthday:** Enter your pet's birthday. This information is used to calculate the age and life stage of your animal.
 
-- **First Name/Identifier:** This field is important because it allows you to personalize the integration and avoid conflicts if multiple pet use Bodypetscale in your home. The name you choose will be used to name the entities created by the integration (e.g., `sensor.firstname_ideal_weight`, `sensor.firstname_body_type`, etc.).
+4. **Configure Animal Characteristics:**
+
+   - **Breed:** Select your pet’s breed. This will affect the energy calculation based on breed-specific factors.
+   - **Activity:** Choose your pet's activity level (e.g., "Normal (1h walk)", "No outdoor access").
+   - **Reproductive:** Indicate the reproductive status of your cat (e.g., "Neutered", "Spayed").
+   - **Temperament (for Cats):** Choose your cat's temperament (e.g., "Calm", "Active").
+   - **Appetite (for Dogs):** Indicate the appetite level of your dog (e.g., "Hearty eater", "Normal", "Small eater").
+
+5. **Configure Sensors and Conditions:**
+
+   - **Environment:** Select your pet's living environment (e.g., "Indoor", "Outdoors in winter"). This factor is used in energy needs estimation.
+   - **Morphology:** Choose your pet’s body condition score, using the provided scale to estimate whether your animal is underweight, ideal, or overweight. You can refer to visual guides on [BodyPetScale's official website](https://dckiller51.github.io/bodypetscale/) to help determine this score.
+   - **Weight Sensor:** Choose the existing weight sensor in Home Assistant (e.g., a `sensor`, or an `input_number`).
+     - **Important Recommendation:** It is **strongly recommended** that each Bodypetscale user has their own dedicated weight sensor. Using a shared weight sensor (e.g., one directly linked to a scale) can cause issues when Home Assistant restarts. This is because Bodypetscale retrieves the sensor's value upon initialization, which can skew calculations if multiple users weigh themselves successively on the same scale before the restart.
+   - **Last Measurement Time Sensor (optional):** If you have a last weigh-in sensor, select it here (e.g., a `sensor`, or an `input_datetime`). This sensor records the date and time of the most recent measurement.
+
+6. **Save the Configuration:**
+
+   - Click "Save" to finalize the configuration.
+
+7. **Access New Sensors:**
+   - Once the configuration is complete, the integration will create new sensors that you can use in your Lovelace dashboards, automations, and other Home Assistant features.
 
 ## FAQ
 

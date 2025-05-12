@@ -1,0 +1,18 @@
+{
+  "domain": "bodypetscale",
+  "name": "BodyPetScale",
+  "codeowners": [
+    "@dckiller51"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/dckiller51/bodypetscale",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/dckiller51/bodypetscale/issues",
+  "loggers": [
+    "custom_components.bodypetscale"
+  ],
+  "requirements": [
+    "cachetools==5.3.0"
+  ],
+  "version": "2025.5.0"
+}
