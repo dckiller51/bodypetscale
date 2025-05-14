@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 <!--next-version-placeholder-->
 
+## 2025.5.1
+
+- Added new attributes to the main sensor.
+- Internal improvement to age calculation logic (more accurate monthly age detection).
+
 ## 2025.5.0
 
 - Initial public release on HACS.
