@@ -41,7 +41,7 @@ from .const import (
     VERSION,
 )
 from .coordinator import BodyPetScaleCoordinator
-from .util import get_config_option
+from .util import get_age_string, get_config_option
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -157,7 +157,9 @@ class MainSensor(BasePetSensor):
             translation_key="main",
         )
         super().__init__(coordinator, config_entry, description)
+        self.config_entry = config_entry
         self._animal_type = config_entry.data.get(CONF_ANIMAL_TYPE)
+        self._birthday = config_entry.data.get(CONF_BIRTHDAY)
         self.coordinator: BodyPetScaleCoordinator = coordinator
         self._morphology = config_entry.data.get(CONF_MORPHOLOGY)
         self._last_time_sensor = config_entry.data.get(CONF_LAST_TIME_SENSOR)
@@ -210,12 +212,32 @@ class MainSensor(BasePetSensor):
         _LOGGER.debug(
             "MainSensor last_measurement_time: %s", self.coordinator.last_time
         )
-        attrs = {
-            "animal_type": self._animal_type,
-            "body_type": self.coordinator.data.get("body_type"),
-            "ideal_weight": self.coordinator.data.get("ideal_weight"),
-            "weight": self.coordinator.data.get(CONF_WEIGHT_SENSOR),
-        }
+        ordered_keys = [
+            "animal_type",
+            "breed",
+            "weight_sensor",
+            "ideal_weight",
+            "body_type",
+            "energy_need",
+            "activity",
+            "reproductive",
+            "environment",
+            "appetite",
+            "temperament",
+        ]
+
+        attrs = {}
+        for key in ordered_keys:
+            value = (
+                self.coordinator.data.get(key)
+                if key in self.coordinator.data
+                else self.config_entry.data.get(key)
+            )
+            if value is not None:
+                attrs[key] = value
+
+        if self._birthday:
+            attrs["age"] = get_age_string(self._birthday)
 
         if self._issue:
             attrs["issue"] = self._issue

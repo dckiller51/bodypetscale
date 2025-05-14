@@ -2,7 +2,7 @@
 
 DOMAIN = "bodypetscale"
 NAME = "BodyPetScale"
-VERSION = "2025.5.0"
+VERSION = "2025.5.1"
 
 ISSUE_URL = "https://github.com/dckiller51/bodypetscale/issues"
 

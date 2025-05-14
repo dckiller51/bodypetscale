@@ -89,24 +89,32 @@ def get_config_option(entry: ConfigEntry, key: str, default: Any = None) -> Any:
     return entry.options.get(key) or entry.data.get(key, default)
 
 
-def get_age(date: str) -> int:
-    """Get current age from birthdate."""
-    born = datetime.strptime(date, "%Y-%m-%d")
-    today = datetime.today()
-    age = today.year - born.year
-    if (today.month, today.day) < (born.month, born.day):
-        age -= 1
-    return age
-
-
 def get_age_in_months(date: str) -> int:
     """Get current age in months from birthdate."""
-    age_years = get_age(date)
+    born = datetime.strptime(date, "%Y-%m-%d")
     today = datetime.today()
-    months = today.month + (age_years * 12)
-    if today.day < datetime.strptime(date, "%Y-%m-%d").day:
+
+    months = (today.year - born.year) * 12 + today.month - born.month
+    if today.day < born.day:
         months -= 1
+
     return months
+
+
+def get_age_string(date: str) -> str:
+    """Return a readable age string from birthdate."""
+    total_months = get_age_in_months(date)
+    years = total_months // 12
+    months = total_months % 12
+
+    year_label = "year" if years == 1 else "years"
+    month_label = "month" if months == 1 else "months"
+
+    if years > 0 and months > 0:
+        return f"{years} {year_label} and {months} {month_label}"
+    if years > 0:
+        return f"{years} {year_label}"
+    return f"{months} {month_label}"
 
 
 def get_cat_age_stage(date: str) -> str:
