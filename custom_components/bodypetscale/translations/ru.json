@@ -36,12 +36,12 @@
       },
       "user": {
         "data": {
-          "animal_type": "Тип животного",
+          "animal_type": "Вид животного",
           "birthday": "День рождения",
           "name": "Имя"
         },
         "data_description": {
-          "animal_type": "Выберите тип животного."
+          "animal_type": "Выберите вид животного."
         }
       }
     }
