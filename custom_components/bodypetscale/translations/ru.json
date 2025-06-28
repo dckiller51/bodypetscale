@@ -345,10 +345,10 @@
             "state": {
               "active": "Активный",
               "calm": "Спокойный",
-              "highly_stressed": "Сильно стрессированный",
+              "highly_stressed": "Сильно напряженный",
               "normal": "Нормальный",
-              "slightly_stressed": "Слегка стрессированный",
-              "stressed": "Стрессированный",
+              "slightly_stressed": "Слегка напряженный",
+              "stressed": "Напряженный",
               "very_calm": "Очень спокойный"
             }
           },
@@ -634,10 +634,10 @@
       "options": {
         "active": "Активный",
         "calm": "Спокойный",
-        "highly_stressed": "Сильно стрессированный",
+        "highly_stressed": "Сильно напряженный",
         "normal": "Нормальный",
-        "slightly_stressed": "Слегка стрессированный",
-        "stressed": "Стрессированный",
+        "slightly_stressed": "Слегка напряженный",
+        "stressed": "Напряженный",
         "very_calm": "Очень спокойный"
       }
     }
