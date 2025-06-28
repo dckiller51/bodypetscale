@@ -69,7 +69,7 @@
       "ideal_weight": { "name": "Идеальный вес" },
       "last_measurement_time": { "name": "Время последнего измерения" },
       "main": {
-        "name": "Основной",
+        "name": "Основное",
         "state": {
           "ok": "OK",
           "problem": "Проблема",
