@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 <!--next-version-placeholder-->
 
+## 2025.6.0
+
+- added Russian language support (thank you @Kvasenok)
+
 ## 2025.5.1
 
 - Added new attributes to the main sensor.
