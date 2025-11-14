@@ -1,5 +1,5 @@
 homeassistant>=2025.9.1
 mypy==1.17.1
 pre-commit==4.3.0
-pylint==3.3.8
+pylint==4.0.3
 types-cachetools
