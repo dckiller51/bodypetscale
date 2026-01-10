@@ -11,5 +11,5 @@
   "loggers": [
     "custom_components.bodypetscale"
   ],
-  "version": "2025.6.0"
+  "version": "2025.12.0"
 }
