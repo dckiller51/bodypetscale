@@ -15,7 +15,7 @@
         "data_description": {
           "last_time_sensor": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide.",
           "living_environment": "Sélectionnez le lieu de vie de votre animal.",
-          "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus](https://dckiller51.github.io/bodypetscale/)"
+          "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus]({learn_more_link})"
         }
       },
       "profile": {
@@ -370,7 +370,7 @@
         "data_description": {
           "last_time_sensor": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide.",
           "living_environment": "Sélectionnez le lieu de vie de votre animal.",
-          "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus](https://dckiller51.github.io/bodypetscale/)"
+          "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus]({learn_more_link})"
         }
       }
     }

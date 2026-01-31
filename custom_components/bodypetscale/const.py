@@ -2,9 +2,10 @@
 
 DOMAIN = "bodypetscale"
 NAME = "BodyPetScale"
-VERSION = "2025.12.0"
+VERSION = "2026.1.0"
 
 ISSUE_URL = "https://github.com/dckiller51/bodypetscale/issues"
+MORPHOLOGY_URL = "https://dckiller51.github.io/bodypetscale/"
 
 CONF_ACTIVITY = "activity"
 CONF_APPETITE = "appetite"

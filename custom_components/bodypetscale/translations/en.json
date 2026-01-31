@@ -15,7 +15,7 @@
         "data_description": {
           "last_time_sensor": "If you do not have a last weigh time sensor, leave this field blank.",
           "living_environment": "Select the living environment of your animal.",
-          "morphology": "Select the morphology of your animal. [Learn more](https://dckiller51.github.io/bodypetscale/)"
+          "morphology": "Select the morphology of your animal. [Learn more]({learn_more_link})"
         }
       },
       "profile": {
@@ -370,7 +370,7 @@
         "data_description": {
           "last_time_sensor": "If you do not have a last weigh time sensor, leave this field blank.",
           "living_environment": "Select the living environment of your animal.",
-          "morphology": "Select the morphology of your animal. [Learn more](https://dckiller51.github.io/bodypetscale/)"
+          "morphology": "Select the morphology of your animal. [Learn more]({learn_more_link})"
         }
       }
     }

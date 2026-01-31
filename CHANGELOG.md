@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 <!--next-version-placeholder-->
 
+## 2026.1.0
+
+- Fixed invalid URL in translations by using description placeholders for morphology help link
+
 ## 2025.12.0
 
 - Fix quality code error
