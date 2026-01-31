@@ -15,7 +15,7 @@
         "data_description": {
           "last_time_sensor": "Если у вас нет датчика времени последнего взвешивания, оставьте это поле пустым.",
           "living_environment": "Выберите среду обитания вашего животного.",
-          "morphology": "Выберите морфологию вашего животного. [Подробнее](https://dckiller51.github.io/bodypetscale/)"
+          "morphology": "Выберите морфологию вашего животного. [Подробнее]({learn_more_link})"
         }
       },
       "profile": {
@@ -370,7 +370,7 @@
         "data_description": {
           "last_time_sensor": "Если у вас нет датчика времени последнего взвешивания, оставьте это поле пустым.",
           "living_environment": "Выберите среду обитания вашего животного.",
-          "morphology": "Выберите морфологию вашего животного. [Подробнее](https://dckiller51.github.io/bodypetscale/)"
+          "morphology": "Выберите морфологию вашего животного. [Подробнее]({learn_more_link})"
         }
       }
     }
