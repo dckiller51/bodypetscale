@@ -1,2 +1,7 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Force LF unconditionally on files that must stay Unix-style,
+# regardless of core.autocrlf on the checkout machine
+scripts/*.sh text eol=lf
+.yamllint text eol=lf

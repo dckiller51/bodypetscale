@@ -55,7 +55,8 @@ def get_options_schema(
     return vol.Schema(
         {
             vol.Required(
-                CONF_LIVING_ENVIRONMENT, default=defaults.get(CONF_LIVING_ENVIRONMENT)
+                CONF_LIVING_ENVIRONMENT,
+                description={"suggested_value": defaults.get(CONF_LIVING_ENVIRONMENT)},
             ): selector.SelectSelector(
                 selector.SelectSelectorConfig(
                     options=living_environment_options,
@@ -65,7 +66,8 @@ def get_options_schema(
                 )
             ),
             vol.Required(
-                CONF_MORPHOLOGY, default=defaults.get(CONF_MORPHOLOGY)
+                CONF_MORPHOLOGY,
+                description={"suggested_value": defaults.get(CONF_MORPHOLOGY)},
             ): selector.SelectSelector(
                 selector.SelectSelectorConfig(
                     options=MORPHOLOGY_OPTIONS,
@@ -75,7 +77,7 @@ def get_options_schema(
             ),
             vol.Required(
                 CONF_WEIGHT_SENSOR,
-                default=defaults.get(CONF_WEIGHT_SENSOR),
+                description={"suggested_value": defaults.get(CONF_WEIGHT_SENSOR)},
             ): selector.EntitySelector(
                 selector.EntitySelectorConfig(
                     domain=["sensor", "input_number", "number"]
@@ -83,7 +85,7 @@ def get_options_schema(
             ),
             vol.Optional(
                 CONF_LAST_TIME_SENSOR,
-                default=defaults.get(CONF_LAST_TIME_SENSOR),
+                description={"suggested_value": defaults.get(CONF_LAST_TIME_SENSOR)},
             ): selector.EntitySelector(
                 selector.EntitySelectorConfig(domain=["sensor", "input_datetime"])
             ),

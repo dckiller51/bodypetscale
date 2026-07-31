@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 <!--next-version-placeholder-->
 
+## 2026.7.0
+
+- Fixed config/options flow crash on `weight_sensor` and `last_time_sensor` fields (`Entity None is neither a valid entity ID nor a valid UUID`) by using suggested values instead of forced defaults ([The empty field isn't working](https://github.com/dckiller51/bodypetscale/issues/77)).
+- Previously saved values for living environment, morphology, weight sensor and last weigh-in sensor now remain pre-filled but editable when reopening options, instead of being reset.
+
 ## 2026.1.0
 
 - Fixed invalid URL in translations by using description placeholders for morphology help link
