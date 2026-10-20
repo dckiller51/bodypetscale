@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 
 <!--next-version-placeholder-->
 
+## 2026.10.1
+
+### ✨ New features
+
+- **Shared scale (profiles)**: like bodymiscale, a single scale weight sensor can now be used for several pets (and people). Each pet chooses an identification method:
+  - **None**: dedicated sensor for this pet (previous behaviour, default for existing pets).
+  - **Weight range**: the measurement is attributed if the weight is in `[min, max[`.
+  - **Nearest weight**: attributed to the pet whose last weight is the nearest, within a tolerance.
+  - **Notification**: interactive notification on the phone, tap the pet name.
+- **Weighing a pet in your arms**: optional **holder weight sensor** (the weight of the person carrying the pet, e.g. their bodymiscale weight sensor). Its value, read at the moment of the weighing, is subtracted from the scale weight. With the notification method, each pet has two buttons: alone and carried.
+- **Stabilized sensor**: optional binary sensor of the scale; the weight is only read once the measurement is stable.
+- With a shared scale, the last accepted weight and the measurement time are stored by the integration and restored after a restart. The last measurement time sensor is created automatically.
+- New `weighing_mode` attribute (`alone` / `held`) on the main sensor.
+
+### 🔧 Improvements
+
+- The options flow now validates the weight sensor, like the initial configuration.
+
 ## 2026.10.0
 
 ### 🔧 Improvements

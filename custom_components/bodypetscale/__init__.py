@@ -5,6 +5,7 @@ import logging
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_NAME, Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.storage import Store
 
 from .const import (
     CONF_ACTIVITY,
@@ -18,9 +19,13 @@ from .const import (
     CONF_REPRODUCTIVE,
     CONF_TEMPERAMENT,
     CONF_WEIGHT_SENSOR,
+    DOMAIN,
+    HANDLERS,
     STARTUP_MESSAGE,
+    STORAGE_VERSION,
 )
 from .coordinator import BodyPetScaleCoordinator
+from .profile import PetScaleHandler
 from .util import PetScaleConfig, get_config_option
 
 PLATFORMS = [Platform.SENSOR]
@@ -45,6 +50,11 @@ def build_pet_config(entry: ConfigEntry) -> PetScaleConfig:
     )
 
 
+def _store(hass: HomeAssistant, entry: ConfigEntry) -> Store:
+    """Return the storage of the last accepted measurement of a pet."""
+    return Store(hass, STORAGE_VERSION, f"{DOMAIN}.{entry.entry_id}")
+
+
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up BodyPetScale from a config entry."""
     _LOGGER.info(STARTUP_MESSAGE)
@@ -56,11 +66,22 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         return False
 
     config = build_pet_config(entry)
-    coordinator = BodyPetScaleCoordinator(hass, config)
+    coordinator = BodyPetScaleCoordinator(hass, config, _store(hass, entry))
+    await coordinator.async_load()
 
-    await coordinator.async_config_entry_first_refresh()
+    domain_data = hass.data.setdefault(DOMAIN, {})
+    handlers: dict[str, PetScaleHandler] = domain_data.setdefault(HANDLERS, {})
+    handler = PetScaleHandler(hass, entry, coordinator, handlers)
+    handlers[entry.entry_id] = handler
+    handler.async_start()
 
-    hass.data.setdefault(entry.domain, {})[entry.entry_id] = coordinator
+    try:
+        await coordinator.async_config_entry_first_refresh()
+    except Exception:
+        handlers.pop(entry.entry_id).unload()
+        raise
+
+    domain_data[entry.entry_id] = coordinator
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
@@ -71,8 +92,19 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unload_ok:
-        hass.data[entry.domain].pop(entry.entry_id)
+        domain_data = hass.data.get(DOMAIN, {})
+        domain_data.pop(entry.entry_id, None)
+        handler: PetScaleHandler | None = domain_data.get(HANDLERS, {}).pop(
+            entry.entry_id, None
+        )
+        if handler is not None:
+            handler.unload()
     return unload_ok
+
+
+async def async_remove_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Remove the stored measurement when a pet is deleted."""
+    await _store(hass, entry).async_remove()
 
 
 async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
