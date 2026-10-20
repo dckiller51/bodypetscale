@@ -6,7 +6,7 @@ import logging
 from types import MappingProxyType
 from typing import Any
 
-import voluptuous as vol
+import probatio
 from homeassistant.config_entries import (
     ConfigEntry,
     ConfigFlow,
@@ -47,14 +47,14 @@ _LOGGER = logging.getLogger(__name__)
 def get_options_schema(
     defaults: dict[str, Any] | MappingProxyType[str, Any],
     animal_type: str,
-) -> vol.Schema:
+) -> probatio.Schema:
     """Return the options schema."""
 
     living_environment_options = LIVING_ENVIRONMENT_OPTIONS.get(animal_type, [])
 
-    return vol.Schema(
+    return probatio.Schema(
         {
-            vol.Required(
+            probatio.Required(
                 CONF_LIVING_ENVIRONMENT,
                 description={"suggested_value": defaults.get(CONF_LIVING_ENVIRONMENT)},
             ): selector.SelectSelector(
@@ -65,7 +65,7 @@ def get_options_schema(
                     sort=True,
                 )
             ),
-            vol.Required(
+            probatio.Required(
                 CONF_MORPHOLOGY,
                 description={"suggested_value": defaults.get(CONF_MORPHOLOGY)},
             ): selector.SelectSelector(
@@ -75,7 +75,7 @@ def get_options_schema(
                     translation_key="morphology",
                 )
             ),
-            vol.Required(
+            probatio.Required(
                 CONF_WEIGHT_SENSOR,
                 description={"suggested_value": defaults.get(CONF_WEIGHT_SENSOR)},
             ): selector.EntitySelector(
@@ -83,7 +83,7 @@ def get_options_schema(
                     domain=["sensor", "input_number", "number"]
                 )
             ),
-            vol.Optional(
+            probatio.Optional(
                 CONF_LAST_TIME_SENSOR,
                 description={"suggested_value": defaults.get(CONF_LAST_TIME_SENSOR)},
             ): selector.EntitySelector(
@@ -123,17 +123,17 @@ class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(
             step_id="user",
-            data_schema=vol.Schema(
+            data_schema=probatio.Schema(
                 {
-                    vol.Required(CONF_NAME): str,
-                    vol.Required(CONF_ANIMAL_TYPE): selector.SelectSelector(
+                    probatio.Required(CONF_NAME): str,
+                    probatio.Required(CONF_ANIMAL_TYPE): selector.SelectSelector(
                         selector.SelectSelectorConfig(
                             options=ANIMAL_TYPES,
                             mode=selector.SelectSelectorMode.DROPDOWN,
                             translation_key="animal_type",
                         )
                     ),
-                    vol.Required(CONF_BIRTHDAY): selector.TextSelector(
+                    probatio.Required(CONF_BIRTHDAY): selector.TextSelector(
                         selector.TextSelectorConfig(type=selector.TextSelectorType.DATE)
                     ),
                 }
@@ -153,21 +153,21 @@ class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):
             return await self.async_step_options()
 
         schema_dict = {
-            vol.Required(CONF_BREED): selector.SelectSelector(
+            probatio.Required(CONF_BREED): selector.SelectSelector(
                 selector.SelectSelectorConfig(
                     options=BREED_OPTIONS.get(animal_type, []),
                     mode=selector.SelectSelectorMode.DROPDOWN,
                     translation_key="breed_options",
                 )
             ),
-            vol.Required(CONF_ACTIVITY): selector.SelectSelector(
+            probatio.Required(CONF_ACTIVITY): selector.SelectSelector(
                 selector.SelectSelectorConfig(
                     options=ACTIVITY_LEVELS.get(animal_type, []),
                     mode=selector.SelectSelectorMode.DROPDOWN,
                     translation_key="activity_level",
                 )
             ),
-            vol.Required(CONF_REPRODUCTIVE): selector.SelectSelector(
+            probatio.Required(CONF_REPRODUCTIVE): selector.SelectSelector(
                 selector.SelectSelectorConfig(
                     options=REPRODUCTIVE_STATUS,
                     mode=selector.SelectSelectorMode.DROPDOWN,
@@ -177,7 +177,7 @@ class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):
         }
 
         if animal_type == "cat":
-            schema_dict[vol.Required(CONF_TEMPERAMENT)] = selector.SelectSelector(
+            schema_dict[probatio.Required(CONF_TEMPERAMENT)] = selector.SelectSelector(
                 selector.SelectSelectorConfig(
                     options=CAT_TEMPERAMENT_OPTIONS,
                     mode=selector.SelectSelectorMode.DROPDOWN,
@@ -185,7 +185,7 @@ class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):
                 )
             )
         else:
-            schema_dict[vol.Required(CONF_APPETITE)] = selector.SelectSelector(
+            schema_dict[probatio.Required(CONF_APPETITE)] = selector.SelectSelector(
                 selector.SelectSelectorConfig(
                     options=DOG_APPETITE_OPTIONS,
                     mode=selector.SelectSelectorMode.DROPDOWN,
@@ -195,7 +195,7 @@ class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(
             step_id="profile",
-            data_schema=vol.Schema(schema_dict),
+            data_schema=probatio.Schema(schema_dict),
             errors=errors,
         )
 
