@@ -66,7 +66,7 @@ def calculate_ideal_weight(
 
     try:
         morph_index = int(morphology.split("_")[0])
-    except (ValueError, IndexError):
+    except ValueError, IndexError:
         _LOGGER.warning("Unable to extract morphology index from %s", morphology)
         return None
 
@@ -254,4 +254,4 @@ def calculate_energy_need(
             base_energy = (ideal_weight**0.667) * 156
         energy_need = base_energy * total_factor
 
-    return int(round(energy_need))
+    return round(float(energy_need))
