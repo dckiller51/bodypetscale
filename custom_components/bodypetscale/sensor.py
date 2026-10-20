@@ -161,8 +161,8 @@ class MainSensor(BasePetSensor):
         self._animal_type = config_entry.data.get(CONF_ANIMAL_TYPE)
         self._birthday = config_entry.data.get(CONF_BIRTHDAY)
         self.coordinator: BodyPetScaleCoordinator = coordinator
-        self._morphology = config_entry.data.get(CONF_MORPHOLOGY)
-        self._last_time_sensor = config_entry.data.get(CONF_LAST_TIME_SENSOR)
+        self._morphology = get_config_option(config_entry, CONF_MORPHOLOGY)
+        self._last_time_sensor = get_config_option(config_entry, CONF_LAST_TIME_SENSOR)
         self._issue: str | None = None
         self._last_time: datetime | None = None
 
@@ -187,7 +187,7 @@ class MainSensor(BasePetSensor):
                 elif weight >= 100:
                     self._issue = "weight_high"
                     result = "problem"
-            except (ValueError, TypeError):
+            except ValueError, TypeError:
                 self._issue = "weight_unavailable"
                 result = "problem"
 
@@ -288,7 +288,7 @@ async def async_setup_entry(
         PetMetricSensor(coordinator, entry, desc) for desc in metric_sensors
     ]
 
-    entities = [main_sensor] + sensor_entities
+    entities = [main_sensor, *sensor_entities]
 
     async_add_entities(entities)
 
