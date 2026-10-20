@@ -1,21 +1,56 @@
 {
+  "common": {
+    "action_held": "{name} (porté)",
+    "weighing_message": "Nouvelle mesure : {weight:.1f} kg",
+    "weighing_title": "BodyPetScale — Qui est sur la balance ?"
+  },
   "config": {
     "error": {
+      "holder_same_as_scale": "Le capteur du porteur doit être différent du capteur de poids de la balance",
+      "invalid_weight_range": "Le maximum doit être supérieur au minimum",
       "invalid_weight_sensor": "Capteur de poids invalide",
       "name_exists": "Déjà configuré"
     },
     "step": {
+      "method": {
+        "data": {
+          "initial_weight": "Poids actuel de l'animal (kg)",
+          "nearest_tolerance": "Tolérance (kg)",
+          "notify_device_id": "Appareil mobile à notifier",
+          "notify_weight_max": "Poids maximum pour notifier (optionnel)",
+          "notify_weight_min": "Poids minimum pour notifier (optionnel)",
+          "weight_max": "Poids maximum (kg, exclu)",
+          "weight_min": "Poids minimum (kg, inclus)"
+        },
+        "data_description": {
+          "initial_weight": "Poids connu, utilisé pour reconnaître la première pesée.",
+          "nearest_tolerance": "Écart maximal entre la mesure et le dernier poids de l'animal.",
+          "notify_device_id": "Téléphone qui reçoit une notification interactive après chaque pesée. Appuyez sur le nom de l'animal (seul ou porté) pour confirmer.",
+          "notify_weight_max": "Proposer cet animal seulement si le poids (seul ou net) est inférieur à cette valeur. Laisser vide pour toujours le proposer.",
+          "notify_weight_min": "Proposer cet animal seulement si le poids (seul ou net) est au moins égal à cette valeur. Laisser vide pour toujours le proposer.",
+          "weight_max": "Borne supérieure exclue. Si l'animal suivant commence à 8 kg, entrez 8 kg.",
+          "weight_min": "La mesure est attribuée à cet animal si son poids (seul, ou net du poids du porteur) est supérieur ou égal à cette valeur."
+        },
+        "title": "Réglages de l'identification"
+      },
       "options": {
         "data": {
+          "holder_weight_sensor": "Capteur de poids du porteur (optionnel)",
           "last_time_sensor": "Capteur de la dernière pesée",
           "living_environment": "Lieu de vie",
           "morphology": "Morphologie",
-          "weight_sensor": "Capteur de poids"
+          "profile_method": "Méthode d'identification de l'animal",
+          "stabilized_sensor": "Capteur de stabilisation (optionnel)",
+          "weight_sensor": "Capteur de poids (dédié ou balance partagée)"
         },
         "data_description": {
-          "last_time_sensor": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide.",
+          "holder_weight_sensor": "Poids de la personne qui porte l'animal sur la balance (par ex. son capteur de poids bodymiscale ou un input_number). Son poids est soustrait du poids de la balance.",
+          "last_time_sensor": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide. Avec une balance partagée, l'heure est enregistrée automatiquement.",
           "living_environment": "Sélectionnez le lieu de vie de votre animal.",
-          "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus]({learn_more_link})"
+          "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus]({learn_more_link})",
+          "profile_method": "Aucune : capteur dédié à cet animal. Plage de poids, Poids le plus proche ou Notification : balance partagée, la mesure est attribuée au bon animal.",
+          "stabilized_sensor": "Capteur binaire de la balance indiquant une mesure stable. Le poids n'est alors lu qu'une fois la mesure stabilisée.",
+          "weight_sensor": "Capteur de poids dédié à cet animal, ou capteur de poids d'une balance partagée par plusieurs animaux et personnes."
         }
       },
       "profile": {
@@ -63,9 +98,7 @@
           "unavailable": "Indisponible"
         }
       },
-      "energy_need": {
-        "name": "Besoin énergétique"
-      },
+      "energy_need": { "name": "Besoin énergétique" },
       "ideal_weight": { "name": "Poids Idéal" },
       "last_measurement_time": { "name": "Dernière heure de pesée" },
       "main": {
@@ -359,19 +392,52 @@
     }
   },
   "options": {
+    "error": {
+      "holder_same_as_scale": "Le capteur du porteur doit être différent du capteur de poids de la balance",
+      "invalid_weight_range": "Le maximum doit être supérieur au minimum",
+      "invalid_weight_sensor": "Capteur de poids invalide"
+    },
     "step": {
       "init": {
         "data": {
+          "holder_weight_sensor": "Capteur de poids du porteur (optionnel)",
           "last_time_sensor": "Capteur de la dernière pesée",
           "living_environment": "Lieu de vie",
           "morphology": "Morphologie",
-          "weight_sensor": "Capteur de poids"
+          "profile_method": "Méthode d'identification de l'animal",
+          "stabilized_sensor": "Capteur de stabilisation (optionnel)",
+          "weight_sensor": "Capteur de poids (dédié ou balance partagée)"
         },
         "data_description": {
-          "last_time_sensor": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide.",
+          "holder_weight_sensor": "Poids de la personne qui porte l'animal sur la balance (par ex. son capteur de poids bodymiscale ou un input_number). Son poids est soustrait du poids de la balance.",
+          "last_time_sensor": "Si vous n'avez pas de capteur pour la dernière heure de pesée, laissez ce champ vide. Avec une balance partagée, l'heure est enregistrée automatiquement.",
           "living_environment": "Sélectionnez le lieu de vie de votre animal.",
-          "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus]({learn_more_link})"
+          "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus]({learn_more_link})",
+          "profile_method": "Aucune : capteur dédié à cet animal. Plage de poids, Poids le plus proche ou Notification : balance partagée, la mesure est attribuée au bon animal.",
+          "stabilized_sensor": "Capteur binaire de la balance indiquant une mesure stable. Le poids n'est alors lu qu'une fois la mesure stabilisée.",
+          "weight_sensor": "Capteur de poids dédié à cet animal, ou capteur de poids d'une balance partagée par plusieurs animaux et personnes."
         }
+      },
+      "method": {
+        "data": {
+          "initial_weight": "Poids actuel de l'animal (kg)",
+          "nearest_tolerance": "Tolérance (kg)",
+          "notify_device_id": "Appareil mobile à notifier",
+          "notify_weight_max": "Poids maximum pour notifier (optionnel)",
+          "notify_weight_min": "Poids minimum pour notifier (optionnel)",
+          "weight_max": "Poids maximum (kg, exclu)",
+          "weight_min": "Poids minimum (kg, inclus)"
+        },
+        "data_description": {
+          "initial_weight": "Poids connu, utilisé pour reconnaître la première pesée.",
+          "nearest_tolerance": "Écart maximal entre la mesure et le dernier poids de l'animal.",
+          "notify_device_id": "Téléphone qui reçoit une notification interactive après chaque pesée. Appuyez sur le nom de l'animal (seul ou porté) pour confirmer.",
+          "notify_weight_max": "Proposer cet animal seulement si le poids (seul ou net) est inférieur à cette valeur. Laisser vide pour toujours le proposer.",
+          "notify_weight_min": "Proposer cet animal seulement si le poids (seul ou net) est au moins égal à cette valeur. Laisser vide pour toujours le proposer.",
+          "weight_max": "Borne supérieure exclue. Si l'animal suivant commence à 8 kg, entrez 8 kg.",
+          "weight_min": "La mesure est attribuée à cet animal si son poids (seul, ou net du poids du porteur) est supérieur ou égal à cette valeur."
+        },
+        "title": "Réglages de l'identification"
       }
     }
   },
@@ -621,6 +687,14 @@
         "7_overweight": "7 - Surpoids",
         "8_obese": "8 - Obèse",
         "9_very_obese": "9 - Très obèse"
+      }
+    },
+    "profile_method": {
+      "options": {
+        "nearest_weight": "Poids le plus proche",
+        "none": "Aucune (capteur dédié)",
+        "notification": "Notification sur le téléphone",
+        "weight_range": "Plage de poids"
       }
     },
     "reproductive_status": {

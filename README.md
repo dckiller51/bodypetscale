@@ -50,16 +50,16 @@ Let's say you've configured a weight sensor called `sensor.my_weight`. When you 
 
 Before installing Bodypetscale, make sure you have the following:
 
-1. **A dedicated pet weight sensor in Home Assistant**: There is no connection between Bodypetscale and a specific smart scale. Bodypetscale works with any weight sensor integrated into Home Assistant. This can be:
-      - A `sensor` entity dedicated to your pet. **Warning:** Using a sensor directly from a scale can cause complications.
-      - An `input_number` entity provides a robust solution for recording your weight measurements in Home Assistant, with the crucial advantage of data persistence even after a system restart.
-      **Important:** Each pet in Bodypetscale must have its own dedicated weight sensor. This sensor must be persistent, meaning that the data remains available when Home Assistant is restarted. Indeed, Bodypetscale retrieves the sensor value when it is initialized, which will distort the calculation data if the sensor is unavailable or at zero.
+1. **A weight sensor in Home Assistant**: There is no connection between Bodypetscale and a specific smart scale. Bodypetscale works with any weight sensor integrated into Home Assistant. This can be:
+
+   - The weight sensor of a scale **shared** by several pets and people. Bodypetscale identifies which pet is on the scale and keeps its last weight across restarts (see [Shared scale](#shared-scale-several-pets-on-one-scale)).
+   - A `sensor` or `input_number` entity **dedicated** to your pet (identification method "None"). It must be persistent: Bodypetscale reads its value when it starts.
 
 2. **Home Assistant installed.**
 
 **(Optional) Last weigh-in sensor dedicated to the pet:**
 
-If you plan to integrate your own last weigh-in sensor, make sure a dedicated sensor is properly configured in Home Assistant. The same recommendation applies: each pet should have their own last weigh-in sensor for optimal results.
+If you plan to integrate your own last weigh-in sensor, make sure a dedicated sensor is properly configured in Home Assistant. With a shared scale this is not needed: the time of each accepted weighing is recorded automatically.
 
 ## Installation
 
@@ -99,9 +99,11 @@ If you plan to integrate your own last weigh-in sensor, make sure a dedicated se
 
    - **Environment:** Select your pet's living environment (e.g., "Indoor", "Outdoors in winter"). This factor is used in energy needs estimation.
    - **Morphology:** Choose your pet’s body condition score, using the provided scale to estimate whether your animal is underweight, ideal, or overweight. You can refer to visual guides on [BodyPetScale's official website](https://dckiller51.github.io/bodypetscale/) to help determine this score.
-   - **Weight Sensor:** Choose the existing weight sensor in Home Assistant (e.g., a `sensor`, or an `input_number`).
-     - **Important Recommendation:** It is **strongly recommended** that each Bodypetscale user has their own dedicated weight sensor. Using a shared weight sensor (e.g., one directly linked to a scale) can cause issues when Home Assistant restarts. This is because Bodypetscale retrieves the sensor's value upon initialization, which can skew calculations if multiple users weigh themselves successively on the same scale before the restart.
+   - **Weight Sensor:** Choose the weight sensor of the scale, or a sensor dedicated to this pet (e.g., a `sensor`, or an `input_number`).
    - **Last Measurement Time Sensor (optional):** If you have a last weigh-in sensor, select it here (e.g., a `sensor`, or an `input_datetime`). This sensor records the date and time of the most recent measurement.
+   - **Stabilized Sensor (optional):** Binary sensor of the scale reporting a stable measurement. The weight is then read only once the measurement is stable.
+   - **Holder Weight Sensor (optional):** Weight of the person who carries the pet on the scale. See [Weighing a pet in your arms](#weighing-a-pet-in-your-arms).
+   - **Identification Method:** "None" for a dedicated sensor, or a method to share the scale (see below). Depending on the method, a last step asks for its settings.
 
 6. **Save the Configuration:**
 
@@ -109,6 +111,34 @@ If you plan to integrate your own last weigh-in sensor, make sure a dedicated se
 
 7. **Access New Sensors:**
    - Once the configuration is complete, the integration will create new sensors that you can use in your Lovelace dashboards, automations, and other Home Assistant features.
+
+## Shared scale (several pets on one scale)
+
+Like [bodymiscale](https://github.com/dckiller51/bodymiscale), Bodypetscale can use the single weight sensor of your scale for every pet. Each pet chooses how a measurement is attributed to it:
+
+| Method             | How it works                                                                                               | Settings                                        |
+| ------------------ | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| **None**           | Dedicated sensor: every value is the weight of this pet (previous behaviour).                              | —                                               |
+| **Weight range**   | The measurement is attributed if the weight is in `[min, max[`. The ranges of the pets must not overlap.   | Minimum and maximum weight                      |
+| **Nearest weight** | The measurement is attributed to the pet whose last weight is the nearest, within the tolerance.           | Current weight of the pet, tolerance (2 kg)     |
+| **Notification**   | Your phone receives an interactive notification after each weighing; tap the name of the pet on the scale. | Phone, optional minimum/maximum weight to offer |
+
+The weight of the pet and the time of the measurement are stored by Bodypetscale, so they are kept after a restart even if someone else used the scale last. If the scale reports a stable measurement through a binary sensor, select it as **Stabilized Sensor** to ignore the intermediate values.
+
+### Weighing a pet in your arms
+
+Many pets will not stay alone on a scale. Set the **Holder Weight Sensor** to the weight of the person carrying the pet (for example their bodymiscale weight sensor, or an `input_number`). The holder weight is subtracted from the scale weight:
+
+- **None:** the holder weight is always subtracted.
+- **Weight range:** the pet is "alone" if the scale weight is in the range, otherwise "carried" if the net weight is in the range.
+- **Nearest weight:** the nearest of the scale weight and the net weight is used.
+- **Notification:** the notification offers two buttons, `Rex` (alone) and `Rex (carried)`.
+
+The holder weight is read at the moment of the weighing, so the result stays correct if the person's own profile is updated with the carried weight just afterwards. The main sensor exposes a `weighing_mode` attribute: `alone` or `held`.
+
+**Using bodymiscale on the same scale:** when you weigh yourself with your pet, your bodymiscale profile may also accept this weight as your own. Use a narrow weight range or tolerance for your own profile, or the notification method, so that the carried weight is not recorded as your weight.
+
+**Notification buttons:** Android shows at most 3 buttons per notification. With several pets, use the optional minimum/maximum weights so that only the relevant pets are offered.
 
 ## FAQ
 

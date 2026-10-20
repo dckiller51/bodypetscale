@@ -2,7 +2,7 @@
 
 DOMAIN = "bodypetscale"
 NAME = "BodyPetScale"
-VERSION = "2026.10.0"
+VERSION = "2026.10.1"
 
 ISSUE_URL = "https://github.com/dckiller51/bodypetscale/issues"
 MORPHOLOGY_URL = "https://dckiller51.github.io/bodypetscale/"
@@ -18,6 +18,64 @@ CONF_MORPHOLOGY = "morphology"
 CONF_REPRODUCTIVE = "reproductive"
 CONF_TEMPERAMENT = "temperament"
 CONF_WEIGHT_SENSOR = "weight_sensor"
+
+# ---------------------------------------------------------------------------
+# Shared scale: profile identification (same methods as bodymiscale)
+# ---------------------------------------------------------------------------
+# none           : dedicated weight sensor for this pet (default, legacy)
+# weight_range   : measurement attributed if the weight is in [min, max[
+# nearest_weight : attributed to the pet whose last weight is the nearest
+# notification   : interactive mobile notification, tap the pet name
+CONF_PROFILE_METHOD = "profile_method"
+PROFILE_METHOD_NONE = "none"
+PROFILE_METHOD_WEIGHT = "weight_range"
+PROFILE_METHOD_NEAREST = "nearest_weight"
+PROFILE_METHOD_NOTIFY = "notification"
+PROFILE_METHOD_OPTIONS = [
+    PROFILE_METHOD_NONE,
+    PROFILE_METHOD_WEIGHT,
+    PROFILE_METHOD_NEAREST,
+    PROFILE_METHOD_NOTIFY,
+]
+
+# Optional sensors of the shared scale
+CONF_STABILIZED_SENSOR = "stabilized_sensor"
+# Weight of the person holding the pet, subtracted from the scale weight
+CONF_HOLDER_WEIGHT_SENSOR = "holder_weight_sensor"
+
+# Method: weight range [min, max[
+CONF_WEIGHT_MIN = "weight_min"
+CONF_WEIGHT_MAX = "weight_max"
+
+# Method: nearest weight
+CONF_INITIAL_WEIGHT = "initial_weight"
+CONF_NEAREST_TOLERANCE = "nearest_tolerance"
+DEFAULT_NEAREST_TOLERANCE = 2.0
+
+# Method: notification
+CONF_NOTIFY_DEVICE_ID = "notify_device_id"
+CONF_NOTIFY_WEIGHT_MIN = "notify_weight_min"
+CONF_NOTIFY_WEIGHT_MAX = "notify_weight_max"
+NOTIFICATION_TAG = "bodypetscale_pet_selection"
+NOTIFICATION_ACTION_PREFIX = "BODYPETSCALE"
+NOTIFICATION_SEND_DELAY = 0.5
+PENDING_MEASUREMENT_TIMEOUT = 300
+
+# Weighing modes
+WEIGHING_ALONE = "alone"
+WEIGHING_HELD = "held"
+ATTR_WEIGHING_MODE = "weighing_mode"
+
+# Delay (s) between the stabilized sensor turning ON and reading the weight
+STABILIZED_READ_DELAY = 1
+
+# hass.data[DOMAIN] keys (besides one coordinator per config entry id)
+HANDLERS = "handlers"
+NOTIFICATION_COORDINATOR = "notification_coordinator"
+
+STORAGE_VERSION = 1
+UNIT_POUNDS = "lb"
+LB_TO_KG = 0.45359237
 
 ATTR_BODY_TYPE = "body_type"
 ATTR_IDEAL = "ideal_weight"

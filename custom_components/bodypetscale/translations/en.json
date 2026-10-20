@@ -1,21 +1,56 @@
 {
+  "common": {
+    "action_held": "{name} (carried)",
+    "weighing_message": "New measurement: {weight:.1f} kg",
+    "weighing_title": "BodyPetScale — Who is on the scale?"
+  },
   "config": {
     "error": {
+      "holder_same_as_scale": "The holder weight sensor must be different from the scale weight sensor",
+      "invalid_weight_range": "The maximum must be greater than the minimum",
       "invalid_weight_sensor": "Invalid weight sensor",
       "name_exists": "Already configured"
     },
     "step": {
+      "method": {
+        "data": {
+          "initial_weight": "Current weight of the pet (kg)",
+          "nearest_tolerance": "Tolerance (kg)",
+          "notify_device_id": "Mobile device to notify",
+          "notify_weight_max": "Maximum weight to notify (optional)",
+          "notify_weight_min": "Minimum weight to notify (optional)",
+          "weight_max": "Maximum weight (kg, excluded)",
+          "weight_min": "Minimum weight (kg, included)"
+        },
+        "data_description": {
+          "initial_weight": "Known weight used to recognise the first weighing.",
+          "nearest_tolerance": "Maximum difference between the measurement and the last weight of the pet.",
+          "notify_device_id": "Phone receiving an interactive notification after each weighing. Tap the pet name (alone or carried) to confirm.",
+          "notify_weight_max": "Only offer this pet when the weight (alone or net) is below this value. Leave empty to always offer it.",
+          "notify_weight_min": "Only offer this pet when the weight (alone or net) is at least this value. Leave empty to always offer it.",
+          "weight_max": "Excluded upper bound. If the next pet starts at 8 kg, enter 8 kg.",
+          "weight_min": "The measurement is attributed to this pet if its weight (alone, or net of the holder weight) is greater than or equal to this value."
+        },
+        "title": "Identification settings"
+      },
       "options": {
         "data": {
+          "holder_weight_sensor": "Holder weight sensor (optional)",
           "last_time_sensor": "Last measurement time sensor",
           "living_environment": "Living environment",
           "morphology": "Morphology",
-          "weight_sensor": "Weight sensor"
+          "profile_method": "Pet identification method",
+          "stabilized_sensor": "Stabilized sensor (optional)",
+          "weight_sensor": "Weight sensor (dedicated or shared scale)"
         },
         "data_description": {
-          "last_time_sensor": "If you do not have a last weigh time sensor, leave this field blank.",
+          "holder_weight_sensor": "Weight of the person who carries the pet on the scale (e.g. their bodymiscale weight sensor or an input_number). Their weight is subtracted from the scale weight.",
+          "last_time_sensor": "If you do not have a last weigh time sensor, leave this field blank. With a shared scale, the time is recorded automatically.",
           "living_environment": "Select the living environment of your animal.",
-          "morphology": "Select the morphology of your animal. [Learn more]({learn_more_link})"
+          "morphology": "Select the morphology of your animal. [Learn more]({learn_more_link})",
+          "profile_method": "None: dedicated sensor for this pet. Weight range, Nearest weight or Notification: shared scale, the measurement is attributed to the right pet.",
+          "stabilized_sensor": "Binary sensor of the scale reporting a stable measurement. The weight is then only read once the measurement is stable.",
+          "weight_sensor": "Weight sensor dedicated to this pet, or the weight sensor of a scale shared by several pets and people."
         }
       },
       "profile": {
@@ -63,9 +98,7 @@
           "unavailable": "Unavailable"
         }
       },
-      "energy_need": {
-        "name": "Energy need"
-      },
+      "energy_need": { "name": "Energy need" },
       "ideal_weight": { "name": "Ideal Weight" },
       "last_measurement_time": { "name": "Last measurement time" },
       "main": {
@@ -359,19 +392,52 @@
     }
   },
   "options": {
+    "error": {
+      "holder_same_as_scale": "The holder weight sensor must be different from the scale weight sensor",
+      "invalid_weight_range": "The maximum must be greater than the minimum",
+      "invalid_weight_sensor": "Invalid weight sensor"
+    },
     "step": {
       "init": {
         "data": {
+          "holder_weight_sensor": "Holder weight sensor (optional)",
           "last_time_sensor": "Last measurement time sensor",
           "living_environment": "Living environment",
           "morphology": "Morphology",
-          "weight_sensor": "Weight sensor"
+          "profile_method": "Pet identification method",
+          "stabilized_sensor": "Stabilized sensor (optional)",
+          "weight_sensor": "Weight sensor (dedicated or shared scale)"
         },
         "data_description": {
-          "last_time_sensor": "If you do not have a last weigh time sensor, leave this field blank.",
+          "holder_weight_sensor": "Weight of the person who carries the pet on the scale (e.g. their bodymiscale weight sensor or an input_number). Their weight is subtracted from the scale weight.",
+          "last_time_sensor": "If you do not have a last weigh time sensor, leave this field blank. With a shared scale, the time is recorded automatically.",
           "living_environment": "Select the living environment of your animal.",
-          "morphology": "Select the morphology of your animal. [Learn more]({learn_more_link})"
+          "morphology": "Select the morphology of your animal. [Learn more]({learn_more_link})",
+          "profile_method": "None: dedicated sensor for this pet. Weight range, Nearest weight or Notification: shared scale, the measurement is attributed to the right pet.",
+          "stabilized_sensor": "Binary sensor of the scale reporting a stable measurement. The weight is then only read once the measurement is stable.",
+          "weight_sensor": "Weight sensor dedicated to this pet, or the weight sensor of a scale shared by several pets and people."
         }
+      },
+      "method": {
+        "data": {
+          "initial_weight": "Current weight of the pet (kg)",
+          "nearest_tolerance": "Tolerance (kg)",
+          "notify_device_id": "Mobile device to notify",
+          "notify_weight_max": "Maximum weight to notify (optional)",
+          "notify_weight_min": "Minimum weight to notify (optional)",
+          "weight_max": "Maximum weight (kg, excluded)",
+          "weight_min": "Minimum weight (kg, included)"
+        },
+        "data_description": {
+          "initial_weight": "Known weight used to recognise the first weighing.",
+          "nearest_tolerance": "Maximum difference between the measurement and the last weight of the pet.",
+          "notify_device_id": "Phone receiving an interactive notification after each weighing. Tap the pet name (alone or carried) to confirm.",
+          "notify_weight_max": "Only offer this pet when the weight (alone or net) is below this value. Leave empty to always offer it.",
+          "notify_weight_min": "Only offer this pet when the weight (alone or net) is at least this value. Leave empty to always offer it.",
+          "weight_max": "Excluded upper bound. If the next pet starts at 8 kg, enter 8 kg.",
+          "weight_min": "The measurement is attributed to this pet if its weight (alone, or net of the holder weight) is greater than or equal to this value."
+        },
+        "title": "Identification settings"
       }
     }
   },
@@ -621,6 +687,14 @@
         "7_overweight": "7 - Overweight",
         "8_obese": "8 - Obese",
         "9_very_obese": "9 - Very Obese"
+      }
+    },
+    "profile_method": {
+      "options": {
+        "nearest_weight": "Nearest weight",
+        "none": "None (dedicated sensor)",
+        "notification": "Notification on the phone",
+        "weight_range": "Weight range"
       }
     },
     "reproductive_status": {

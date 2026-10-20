@@ -5,11 +5,12 @@ from datetime import datetime
 from typing import Any
 
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.storage import Store
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.util import dt as dt_util
 from homeassistant.util.dt import parse_datetime
 
-from .const import CONF_LAST_TIME_SENSOR, CONF_WEIGHT_SENSOR
+from .const import ATTR_WEIGHING_MODE, CONF_LAST_TIME_SENSOR, CONF_WEIGHT_SENSOR
 from .util import (
     EnergyConfig,
     PetScaleConfig,
@@ -20,18 +21,6 @@ from .util import (
 )
 
 _LOGGER = logging.getLogger(__name__)
-
-
-async def _get_state_as_float(hass: HomeAssistant, entity_id: str) -> float | None:
-    """Get the state of a sensor as a float, return None if invalid."""
-    state = hass.states.get(entity_id)
-    if state is None or state.state in ["unavailable", "unknown"]:
-        return None
-    try:
-        return float(state.state)
-    except ValueError:
-        _LOGGER.warning("Unable to convert state of %s to float", entity_id)
-        return None
 
 
 async def _get_state_as_string(hass: HomeAssistant, entity_id: str) -> str | None:
@@ -45,35 +34,88 @@ async def _get_state_as_string(hass: HomeAssistant, entity_id: str) -> str | Non
 class BodyPetScaleCoordinator(DataUpdateCoordinator):
     """Coordinator for the BodyPetScale integration."""
 
-    def __init__(self, hass: HomeAssistant, config: PetScaleConfig) -> None:
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        config: PetScaleConfig,
+        store: Store[dict[str, Any]] | None = None,
+    ) -> None:
         super().__init__(
             hass,
             logger=_LOGGER,
             name="BodyPetScaleCoordinator",
         )
         self.config = config
+        self._store = store
         self._last_time: datetime | None = None
+        # Weight accepted for this pet (net of the holder weight if carried)
+        self.weight: float | None = None
+        self.measured_at: datetime | None = None
+        self.weighing_mode: str | None = None
 
     @property
     def last_time(self) -> datetime | None:
         """Return the last time measurement."""
         return self._last_time
 
+    async def async_load(self) -> None:
+        """Restore the last accepted measurement."""
+        if self._store is None or (stored := await self._store.async_load()) is None:
+            return
+        weight = stored.get("weight")
+        self.weight = float(weight) if weight is not None else None
+        measured_at = stored.get("measured_at")
+        self.measured_at = parse_datetime(measured_at) if measured_at else None
+        self.weighing_mode = stored.get("weighing_mode")
+
+    def set_weight(
+        self, weight: float | None, *, stamp: bool, mode: str | None = None
+    ) -> None:
+        """Set the accepted weight without refreshing the sensors."""
+        self.weight = weight
+        if stamp:
+            self.measured_at = dt_util.utcnow()
+            self.weighing_mode = mode
+
+    async def async_set_weight(
+        self, weight: float | None, *, stamp: bool, mode: str | None = None
+    ) -> None:
+        """Set the accepted weight, persist it and refresh the sensors."""
+        self.set_weight(weight, stamp=stamp, mode=mode)
+        if self._store is not None:
+            await self._store.async_save(
+                {
+                    "weight": self.weight,
+                    "measured_at": self.measured_at.isoformat()
+                    if self.measured_at
+                    else None,
+                    "weighing_mode": self.weighing_mode,
+                }
+            )
+        await self.async_refresh()
+
     async def _async_update_data(self) -> dict:
-        """Fetch and calculate data for pet scale sensors."""
-        weight = await _get_state_as_float(self.hass, self.config.weight_sensor)
-        last_time = (
-            await _get_state_as_string(self.hass, self.config.last_time_sensor)
-            if self.config.last_time_sensor
-            else None
-        )
+        """Calculate data for pet scale sensors."""
+        weight = self.weight
 
         data: dict[str, Any] = {
             CONF_WEIGHT_SENSOR: weight,
+            ATTR_WEIGHING_MODE: self.weighing_mode,
         }
 
         self._process_weight_data(weight, data)
-        self._process_last_time_data(last_time, data)
+        if self.config.last_time_sensor:
+            self._process_last_time_data(
+                await _get_state_as_string(self.hass, self.config.last_time_sensor),
+                data,
+            )
+        else:
+            self._last_time = (
+                self.measured_at.astimezone(dt_util.DEFAULT_TIME_ZONE)
+                if self.measured_at
+                else None
+            )
+            data[CONF_LAST_TIME_SENSOR] = self._last_time
 
         if weight is not None and data.get("ideal_weight") is not None:
             self._process_energy_need(weight, data)

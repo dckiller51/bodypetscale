@@ -12,10 +12,9 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_NAME, UnitOfMass
-from homeassistant.core import Event, EventStateChangedData, HomeAssistant
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.event import async_track_state_change_event
 from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
     DataUpdateCoordinator,
@@ -26,18 +25,22 @@ from .const import (
     ATTR_ENERGY_NEED,
     ATTR_IDEAL,
     ATTR_MAIN,
+    ATTR_WEIGHING_MODE,
     CONF_ACTIVITY,
     CONF_ANIMAL_TYPE,
     CONF_APPETITE,
     CONF_BIRTHDAY,
     CONF_BREED,
+    CONF_HOLDER_WEIGHT_SENSOR,
     CONF_LAST_TIME_SENSOR,
     CONF_LIVING_ENVIRONMENT,
     CONF_MORPHOLOGY,
+    CONF_PROFILE_METHOD,
     CONF_REPRODUCTIVE,
     CONF_TEMPERAMENT,
     CONF_WEIGHT_SENSOR,
     DOMAIN,
+    PROFILE_METHOD_NONE,
     VERSION,
 )
 from .coordinator import BodyPetScaleCoordinator
@@ -224,6 +227,7 @@ class MainSensor(BasePetSensor):
             "environment",
             "appetite",
             "temperament",
+            ATTR_WEIGHING_MODE,
         ]
 
         attrs = {}
@@ -260,53 +264,26 @@ async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Configure the sensor platform for BodyPetScale."""
-    weight_sensor = entry.options.get(CONF_WEIGHT_SENSOR)
-    last_time_sensor = entry.options.get(CONF_LAST_TIME_SENSOR)
-
-    if not weight_sensor:
+    if not entry.options.get(CONF_WEIGHT_SENSOR):
         _LOGGER.error("The weight sensor is missing in the configuration entry")
         return
 
     coordinator: BodyPetScaleCoordinator = hass.data[DOMAIN][entry.entry_id]
 
-    try:
-        await coordinator.async_config_entry_first_refresh()
-    except (ValueError, RuntimeError) as err:
-        _LOGGER.error("Error during the initial data fetch: %s", err)
-        return  # Do not proceed if the initial fetch fails
-
-    main_sensor = MainSensor(coordinator, entry)
-
     metric_keys = [CONF_WEIGHT_SENSOR, ATTR_IDEAL, ATTR_BODY_TYPE, ATTR_ENERGY_NEED]
 
-    if last_time_sensor:
+    # The last measurement time comes from a dedicated sensor, or is recorded
+    # by the integration when a shared scale measurement is accepted.
+    shared_scale = entry.options.get(
+        CONF_PROFILE_METHOD, PROFILE_METHOD_NONE
+    ) != PROFILE_METHOD_NONE or entry.options.get(CONF_HOLDER_WEIGHT_SENSOR)
+    if entry.options.get(CONF_LAST_TIME_SENSOR) or shared_scale:
         metric_keys.append(CONF_LAST_TIME_SENSOR)
 
-    metric_sensors = [desc for desc in SENSORS if desc.key in metric_keys]
-
     sensor_entities = [
-        PetMetricSensor(coordinator, entry, desc) for desc in metric_sensors
+        PetMetricSensor(coordinator, entry, desc)
+        for desc in SENSORS
+        if desc.key in metric_keys
     ]
 
-    entities = [main_sensor, *sensor_entities]
-
-    async_add_entities(entities)
-
-    # Add a listener to update when the weight sensor or last update sensor changes
-    listeners = [weight_sensor]
-    if last_time_sensor:
-        listeners.append(last_time_sensor)
-
-    async def async_state_changed_listener(event: Event[EventStateChangedData]) -> None:
-        """Update when the state of monitored sensors changes."""
-        entity_id = event.data["entity_id"]
-
-        if entity_id in listeners:
-            _LOGGER.info(
-                "Monitored sensor %s changed, updating",
-                entity_id,
-            )
-            await coordinator.async_refresh()
-
-    for entity_id in listeners:
-        async_track_state_change_event(hass, entity_id, async_state_changed_listener)
+    async_add_entities([MainSensor(coordinator, entry), *sensor_entities])
