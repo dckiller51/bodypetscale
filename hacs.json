@@ -1,5 +1,7 @@
 {
+  "filename": "bodypetscale.zip",
   "homeassistant": "2026.9.0",
   "name": "Bodypetscale",
-  "render_readme": true
+  "render_readme": true,
+  "zip_release": true
 }
