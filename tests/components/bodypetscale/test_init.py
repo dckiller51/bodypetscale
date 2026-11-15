@@ -11,6 +11,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 from custom_components.bodypetscale import build_pet_config
 from custom_components.bodypetscale.const import (
     CONF_MORPHOLOGY,
+    CONF_REPRODUCTIVE,
     CONF_WEIGHT_SENSOR,
     DOMAIN,
 )
@@ -90,3 +91,25 @@ async def test_options_update_reloads_entry(
     assert new_coordinator is not old_coordinator
     assert new_coordinator.config.morphology == "7_overweight"
     assert new_coordinator.data["ideal_weight"] == 8.0
+
+
+async def test_reproductive_status_change_in_options(
+    hass: HomeAssistant, dog_entry: MockConfigEntry, freezer: Any
+) -> None:
+    """A reproductive status set in the options overrides the initial one."""
+    freezer.move_to("2026-10-20 12:00:00+00:00")
+    hass.states.async_set(WEIGHT_SENSOR, "10")
+    dog_entry.add_to_hass(hass)
+    assert await hass.config_entries.async_setup(dog_entry.entry_id)
+    await hass.async_block_till_done()
+    assert hass.data[DOMAIN][dog_entry.entry_id].config.reproductive == "neutered"
+    old_energy = hass.data[DOMAIN][dog_entry.entry_id].data["energy_need"]
+
+    hass.config_entries.async_update_entry(
+        dog_entry, options={**dog_entry.options, CONF_REPRODUCTIVE: "intact"}
+    )
+    await hass.async_block_till_done()
+
+    coordinator = hass.data[DOMAIN][dog_entry.entry_id]
+    assert coordinator.config.reproductive == "intact"
+    assert coordinator.data["energy_need"] != old_energy

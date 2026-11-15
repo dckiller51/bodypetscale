@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 <!--next-version-placeholder-->
 
+## 2026.11.0
+
+### 🔧 Improvements
+
+- **Options flow**: the reproductive status (intact / neutered / spayed) can now be changed in the options, without deleting and re-adding the pet. The energy need and ideal weight are recalculated after saving ([#128](https://github.com/dckiller51/bodypetscale/issues/128)).
+
 ## 2026.10.1
 
 ### ✨ New features

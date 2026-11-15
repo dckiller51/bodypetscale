@@ -91,7 +91,7 @@ If you plan to integrate your own last weigh-in sensor, make sure a dedicated se
 
    - **Breed:** Select your pet’s breed. This will affect the energy calculation based on breed-specific factors.
    - **Activity:** Choose your pet's activity level (e.g., "Normal (1h walk)", "No outdoor access").
-   - **Reproductive:** Indicate the reproductive status of your cat (e.g., "Neutered", "Spayed").
+   - **Reproductive:** Indicate the reproductive status of your pet (e.g., "Intact", "Neutered", "Spayed"). It can be changed later in the integration options (**Configure**), e.g. after neutering.
    - **Temperament (for Cats):** Choose your cat's temperament (e.g., "Calm", "Active").
    - **Appetite (for Dogs):** Indicate the appetite level of your dog (e.g., "Hearty eater", "Normal", "Small eater").
 

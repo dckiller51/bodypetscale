@@ -56,20 +56,47 @@ from .const import (
     PROFILE_METHOD_WEIGHT,
     REPRODUCTIVE_STATUS,
 )
+from .util import get_config_option
 
 _LOGGER = logging.getLogger(__name__)
+
+
+def _reproductive_selector() -> selector.SelectSelector:
+    return selector.SelectSelector(
+        selector.SelectSelectorConfig(
+            options=REPRODUCTIVE_STATUS,
+            mode=selector.SelectSelectorMode.DROPDOWN,
+            translation_key="reproductive_status",
+        )
+    )
 
 
 def get_options_schema(
     defaults: dict[str, Any] | MappingProxyType[str, Any],
     animal_type: str,
+    include_reproductive: bool = False,
 ) -> probatio.Schema:
-    """Return the options schema."""
+    """Return the options schema.
+
+    The reproductive status is asked in the profile step of the initial
+    configuration, so it is only added to the schema of the options flow, where
+    it can be updated during the pet's life (e.g. after neutering).
+    """
 
     living_environment_options = LIVING_ENVIRONMENT_OPTIONS.get(animal_type, [])
 
+    reproductive_field: dict[Any, Any] = {}
+    if include_reproductive:
+        reproductive_field = {
+            probatio.Required(
+                CONF_REPRODUCTIVE,
+                description={"suggested_value": defaults.get(CONF_REPRODUCTIVE)},
+            ): _reproductive_selector()
+        }
+
     return probatio.Schema(
         {
+            **reproductive_field,
             probatio.Required(
                 CONF_LIVING_ENVIRONMENT,
                 description={"suggested_value": defaults.get(CONF_LIVING_ENVIRONMENT)},
@@ -298,13 +325,7 @@ class BodyPetScaleConfigFlow(ConfigFlow, domain=DOMAIN):
                     translation_key="activity_level",
                 )
             ),
-            probatio.Required(CONF_REPRODUCTIVE): selector.SelectSelector(
-                selector.SelectSelectorConfig(
-                    options=REPRODUCTIVE_STATUS,
-                    mode=selector.SelectSelectorMode.DROPDOWN,
-                    translation_key="reproductive_status",
-                )
-            ),
+            probatio.Required(CONF_REPRODUCTIVE): _reproductive_selector(),
         }
 
         if animal_type == "cat":
@@ -404,9 +425,14 @@ class BodyPetScaleOptionsFlow(OptionsFlow):
                 return await self.async_step_method()
 
         animal_type = self.config_entry.data.get(CONF_ANIMAL_TYPE, "cat")
+        defaults = user_input or {
+            # Entries created before this option existed keep it in data
+            CONF_REPRODUCTIVE: get_config_option(self.config_entry, CONF_REPRODUCTIVE),
+            **self.config_entry.options,
+        }
 
         schema = await self.hass.async_add_executor_job(
-            get_options_schema, user_input or self.config_entry.options, animal_type
+            get_options_schema, defaults, animal_type, True
         )
 
         return self.async_show_form(

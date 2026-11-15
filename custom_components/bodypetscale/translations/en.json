@@ -405,6 +405,7 @@
           "living_environment": "Living environment",
           "morphology": "Morphology",
           "profile_method": "Pet identification method",
+          "reproductive": "Reproductive status",
           "stabilized_sensor": "Stabilized sensor (optional)",
           "weight_sensor": "Weight sensor (dedicated or shared scale)"
         },
@@ -414,6 +415,7 @@
           "living_environment": "Select the living environment of your animal.",
           "morphology": "Select the morphology of your animal. [Learn more]({learn_more_link})",
           "profile_method": "None: dedicated sensor for this pet. Weight range, Nearest weight or Notification: shared scale, the measurement is attributed to the right pet.",
+          "reproductive": "Select the reproductive status of your animal. Update it after neutering or spaying: the energy need and the ideal weight are recalculated.",
           "stabilized_sensor": "Binary sensor of the scale reporting a stable measurement. The weight is then only read once the measurement is stable.",
           "weight_sensor": "Weight sensor dedicated to this pet, or the weight sensor of a scale shared by several pets and people."
         }

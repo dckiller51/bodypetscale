@@ -405,6 +405,7 @@
           "living_environment": "Lieu de vie",
           "morphology": "Morphologie",
           "profile_method": "Méthode d'identification de l'animal",
+          "reproductive": "Statut reproductif",
           "stabilized_sensor": "Capteur de stabilisation (optionnel)",
           "weight_sensor": "Capteur de poids (dédié ou balance partagée)"
         },
@@ -414,6 +415,7 @@
           "living_environment": "Sélectionnez le lieu de vie de votre animal.",
           "morphology": "Sélectionnez la morphologie de votre animal. [En savoir plus]({learn_more_link})",
           "profile_method": "Aucune : capteur dédié à cet animal. Plage de poids, Poids le plus proche ou Notification : balance partagée, la mesure est attribuée au bon animal.",
+          "reproductive": "Sélectionnez le statut reproductif de votre animal. Mettez-le à jour après une castration ou une stérilisation : le besoin énergétique et le poids idéal sont recalculés.",
           "stabilized_sensor": "Capteur binaire de la balance indiquant une mesure stable. Le poids n'est alors lu qu'une fois la mesure stabilisée.",
           "weight_sensor": "Capteur de poids dédié à cet animal, ou capteur de poids d'une balance partagée par plusieurs animaux et personnes."
         }
