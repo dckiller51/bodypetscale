@@ -56,6 +56,9 @@ from .conftest import (
 
 SETUP_ENTRY = "custom_components.bodypetscale.async_setup_entry"
 
+# The options flow also asks the reproductive status (pre-filled in the UI)
+DOG_OPTIONS_FLOW = {**DOG_OPTIONS, CONF_REPRODUCTIVE: DOG_DATA[CONF_REPRODUCTIVE]}
+
 
 def _user_step(data: dict[str, Any]) -> dict[str, Any]:
     return {key: data[key] for key in (CONF_NAME, CONF_ANIMAL_TYPE, CONF_BIRTHDAY)}
@@ -267,6 +270,7 @@ async def test_options_flow(hass: HomeAssistant, cat_entry: MockConfigEntry) -> 
         if "description" in f
     }
     assert suggested == {
+        CONF_REPRODUCTIVE: "neutered",
         CONF_LIVING_ENVIRONMENT: "indoors",
         CONF_MORPHOLOGY: "6_slightly_overweight",
         CONF_WEIGHT_SENSOR: WEIGHT_SENSOR,
@@ -277,6 +281,7 @@ async def test_options_flow(hass: HomeAssistant, cat_entry: MockConfigEntry) -> 
 
     hass.states.async_set("sensor.other_weight", "4.2")
     new_options = {
+        CONF_REPRODUCTIVE: "spayed",
         CONF_LIVING_ENVIRONMENT: "outdoors_winter",
         CONF_MORPHOLOGY: "5_ideal",
         CONF_WEIGHT_SENSOR: "sensor.other_weight",
@@ -289,6 +294,33 @@ async def test_options_flow(hass: HomeAssistant, cat_entry: MockConfigEntry) -> 
         **new_options,
         CONF_PROFILE_METHOD: PROFILE_METHOD_NONE,
     }
+
+
+async def test_options_flow_reproductive_prefers_options(
+    hass: HomeAssistant, cat_entry: MockConfigEntry
+) -> None:
+    """Once changed in the options, the reproductive status is pre-filled from them."""
+    cat_entry.add_to_hass(hass)
+    hass.config_entries.async_update_entry(
+        cat_entry, options={**cat_entry.options, CONF_REPRODUCTIVE: "intact"}
+    )
+
+    result = await hass.config_entries.options.async_init(cat_entry.entry_id)
+    fields = probatio.to_field_list(
+        result["data_schema"], custom_serializer=cv.custom_serializer
+    )
+    suggested = {
+        f["name"]: f["description"]["suggested_value"]
+        for f in fields
+        if "description" in f
+    }
+    assert suggested[CONF_REPRODUCTIVE] == "intact"
+
+
+def test_options_schema_reproductive_only_on_request() -> None:
+    """The initial config already asks it in the profile step."""
+    assert CONF_REPRODUCTIVE not in _field_names(get_options_schema({}, "dog"))
+    assert _field_names(get_options_schema({}, "dog", True))[0] == CONF_REPRODUCTIVE
 
 
 # ===========================================================================
@@ -393,7 +425,8 @@ async def test_options_flow_method_switch(
 
     result = await hass.config_entries.options.async_init(dog_entry.entry_id)
     result = await hass.config_entries.options.async_configure(
-        result["flow_id"], {**DOG_OPTIONS, CONF_PROFILE_METHOD: PROFILE_METHOD_NEAREST}
+        result["flow_id"],
+        {**DOG_OPTIONS_FLOW, CONF_PROFILE_METHOD: PROFILE_METHOD_NEAREST},
     )
     assert result["step_id"] == "method"
     result = await hass.config_entries.options.async_configure(
@@ -406,7 +439,8 @@ async def test_options_flow_method_switch(
     # The method step suggests the saved values when opened again
     result = await hass.config_entries.options.async_init(dog_entry.entry_id)
     result = await hass.config_entries.options.async_configure(
-        result["flow_id"], {**DOG_OPTIONS, CONF_PROFILE_METHOD: PROFILE_METHOD_NEAREST}
+        result["flow_id"],
+        {**DOG_OPTIONS_FLOW, CONF_PROFILE_METHOD: PROFILE_METHOD_NEAREST},
     )
     fields = probatio.to_field_list(
         result["data_schema"], custom_serializer=cv.custom_serializer
@@ -419,11 +453,12 @@ async def test_options_flow_method_switch(
     # Back to a dedicated sensor: the nearest weight settings are removed
     result = await hass.config_entries.options.async_init(dog_entry.entry_id)
     result = await hass.config_entries.options.async_configure(
-        result["flow_id"], {**DOG_OPTIONS, CONF_PROFILE_METHOD: PROFILE_METHOD_NONE}
+        result["flow_id"],
+        {**DOG_OPTIONS_FLOW, CONF_PROFILE_METHOD: PROFILE_METHOD_NONE},
     )
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert dog_entry.options == {
-        **DOG_OPTIONS,
+        **DOG_OPTIONS_FLOW,
         CONF_PROFILE_METHOD: PROFILE_METHOD_NONE,
     }
 
@@ -435,7 +470,7 @@ async def test_options_flow_invalid_weight_sensor(
     dog_entry.add_to_hass(hass)
     result = await hass.config_entries.options.async_init(dog_entry.entry_id)
     result = await hass.config_entries.options.async_configure(
-        result["flow_id"], {**DOG_OPTIONS, CONF_WEIGHT_SENSOR: "sensor.missing"}
+        result["flow_id"], {**DOG_OPTIONS_FLOW, CONF_WEIGHT_SENSOR: "sensor.missing"}
     )
     assert result["type"] is FlowResultType.FORM
     assert result["errors"] == {CONF_WEIGHT_SENSOR: "invalid_weight_sensor"}

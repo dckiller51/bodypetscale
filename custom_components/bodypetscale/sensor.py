@@ -235,7 +235,7 @@ class MainSensor(BasePetSensor):
             value = (
                 self.coordinator.data.get(key)
                 if key in self.coordinator.data
-                else self.config_entry.data.get(key)
+                else get_config_option(self.config_entry, key)
             )
             if value is not None:
                 attrs[key] = value

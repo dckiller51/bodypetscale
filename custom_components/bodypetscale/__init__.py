@@ -45,7 +45,7 @@ def build_pet_config(entry: ConfigEntry) -> PetScaleConfig:
         environment=entry.options.get(CONF_LIVING_ENVIRONMENT, ""),
         morphology=entry.options.get(CONF_MORPHOLOGY, ""),
         name=entry.data.get(CONF_NAME, ""),
-        reproductive=entry.data.get(CONF_REPRODUCTIVE, ""),
+        reproductive=get_config_option(entry, CONF_REPRODUCTIVE, ""),
         temperament=entry.data.get(CONF_TEMPERAMENT, ""),
     )
 
